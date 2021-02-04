@@ -41,3 +41,7 @@ println(myNumberString.getClass, myNumber.getClass) //printing does not show tha
 val isRaining = false
 val isSnowing = true
 val isCold = true
+println(s"Is it raining AND snowing: ${isRaining && isSnowing}")
+
+val myPrintResult = println("Something") //printing returns nothing so ...
+println(myPrintResult, myPrintResult.getClass)
