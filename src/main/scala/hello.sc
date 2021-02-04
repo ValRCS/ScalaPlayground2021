@@ -45,3 +45,9 @@ println(s"Is it raining AND snowing: ${isRaining && isSnowing}")
 
 val myPrintResult = println("Something") //printing returns nothing so ...
 println(myPrintResult, myPrintResult.getClass)
+
+println({
+  val x = 1 + 1
+  x + 1 //so returns last line to be used by println function
+}) // 3
+//println(x) //x is not available outside { }
