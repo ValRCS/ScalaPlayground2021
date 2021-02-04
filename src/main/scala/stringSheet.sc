@@ -27,3 +27,11 @@ val magic = "abracadabra"
 val newMagic = magic.replace("a", "A")
 println(newMagic)
 println(newMagic.toLowerCase) //again i am only printing conversion not saving
+println(newMagic(0).toLong)
+//so why is it 65
+//because of 20th century Teletypes from over 80  years ago
+//http://www.asciitable.com/
+val myPet = "kaķis" //cat //this is worksheet issue
+//need to use regular application for Unicode
+println(myPet(0).toLong)  //k
+println(myPet(2).toLong) //ķ

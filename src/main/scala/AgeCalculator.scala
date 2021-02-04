@@ -9,7 +9,8 @@ object AgeCalculator extends App {
   val currentYear = now.get(Calendar.YEAR)
   println(s"Current year is  $currentYear")
   val personName = readLine("What is your name?")
-  val personAge = readLine(s"Nice to meet you $personName. Can you tell your age as well?").toInt
+  //we add trim to allow age be started with whitespace (also end is ok too)
+  val personAge = readLine(s"Nice to meet you $personName. Can you tell your age as well?").trim.toInt
   val yearsToTarget = targetYear - personAge
   println(s"$personName, you have $yearsToTarget years left until you will be 100")
   println(s"$personName you will be $targetYear old in year ${currentYear+yearsToTarget}")
