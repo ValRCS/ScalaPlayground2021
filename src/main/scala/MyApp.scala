@@ -6,4 +6,6 @@ object MyApp extends App{
   //comments are ignored by computer
   //comments are best when they explain why you did something
   println("Hmm more code!") //saying print is printing something is not very helpful :)
+  //we just adding new instruction but we will want to save some data
+  //most likely we will want to branch depending on what that data is
 }
