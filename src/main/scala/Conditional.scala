@@ -15,6 +15,12 @@ object Conditional extends App {
 
   if (myInput > 5) {
     println("Oh your number is over 5! ", myInput)
+    //we can have if inside another if (but things can get complicated)
+    if (myInput > 100) {
+      println("Wow over 100!")
+    } else {
+      println("over 5 but less or equal to 100")
+    }
   } else if (myInput < 5) {
     println("Oh your number is under 5! ", myInput)
   } else {
