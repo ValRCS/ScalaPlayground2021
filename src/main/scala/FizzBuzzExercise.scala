@@ -9,4 +9,9 @@ object FizzBuzzExercise extends App {
   //so this exercise tests your ability to write conditionals and also to write a simple loop
 
   //this exercise is the first screener at an interview to see if a person can program
+  //for the first time it is okay to print the results in new line each
+  //1
+  //2 and so on
+  //99
+  //Fizz
 }
