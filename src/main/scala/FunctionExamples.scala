@@ -103,12 +103,12 @@ object FunctionExamples extends App {
   val newWords = numbers.map(num => s"Number $num")
   println(newWords.mkString(","))
 
-  val oddNumbers = numbers.filter(num => num %2 == 1)
+  val oddNumbers = numbers.filter(num => num % 2 == 1)
   println(oddNumbers.mkString(","))
   val sortedNumbers = numbers.sorted
   println(sortedNumbers.mkString(","))
   val sortedNumbersReversed = sortedNumbers.reverse
   println(sortedNumbersReversed.mkString(","))
-  //we do not
+
 
 }
