@@ -3,9 +3,23 @@ object FunctionExercises extends App {
     //TODO actually check if the text reads the same from both ways
     //"alus ari ir sula" that's a palindrome
     //text.reverse should work :)
-    false
+//    text.toLowerCase().replaceAll(" ", "") == text.reverse.toLowerCase().replaceAll(" ", "")
+//    text == text.reverse //this would be okay for first try
+    val textWhitespacesRemoved = text.replace(" ", "")
+    if (textWhitespacesRemoved.equalsIgnoreCase(textWhitespacesRemoved.reverse))
+    {
+      println(s"'$text' is a palindrome")
+      true //this is last line of function
+    }
+    else {
+      println(s"'$text' is not a palindrome")
+      false //this is also last depending on which branch we take
+    }
   }
 
+  println(isPalindrome("aBBa"))
+  println(isPalindrome("nota Palindrome..."))
+  println(isPalindrome("alus ari   ira    sula"))
 //  def getCityYear
   //Write a function which takes 4 parameters p0, perc, delta, p
   //return integer of years when the population reaches p
