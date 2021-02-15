@@ -27,6 +27,40 @@ object Sequences extends App {
   println(filteredSeq)
   mySeq.foreach(el => println(el+20)) //so this will just pring each element with 20 added
 
+  //Scala is not big on mutating but we can do it
+  //generally we want to do it before finalizing this data into some immutable
+  //https://alvinalexander.com/scala/how-to-append-prepend-items-vector-seq-in-scala/
+  println(myMutableSeq :+ 100)
+  val newMutable = myMutableSeq :+ 100
+  println(newMutable)
+  val newImmutable = mySeq :+ 2000 //so again I have to save it in new value
+  println(newImmutable)
+  newMutable.drop(6)
+  println(newMutable)
+  val anotherMutable = newMutable.drop(2) //so drops from beginning
+  println(anotherMutable)
+
+  val bigSeq = (1 to 10).toVector //so Range is something half ready given on Demand, Vector is something already made
+  println(bigSeq)
+  println(bigSeq.slice(3,6)) //so it should start with 4 (index 3 is 4th element)
+  val newSlice = bigSeq.slice(2,5)
+  println(newSlice)
+  println(newSlice.length)
+  val by1000 = newSlice.map(_ * 1000)
+  println(by1000)
+
+  //so Array comes from Java and does not have as nice the printing
+  val a2 = Array("one", "two", "three", "four")
+  val a3 = Array(100, "two", "three", "four") //so try to avoid Any because well it is just too generic, keep one type per sequence
+  println(by1000(2))
+  println(by1000.last)
+  println(a2.slice(1,3).toSeq.toString)
+
+  println(bigSeq.sum)
+  println(bigSeq.length)
+  println(bigSeq.sum/bigSeq.length.toDouble) //so aritmetic mean we want one of the values be Double Long so we get Double Long as result
+
+
 
 
 }
