@@ -2,7 +2,9 @@ import scala.collection.mutable
 
 object Sequences extends App {
   val mySeq = Seq(1,2,4,5) //generally you want this
+//  mySeq(3) = 333 can't change insdies of immutable sequence
   val myMutableSeq = mutable.Seq(1,2,6,4) //or use this when you need to adjust contents
+  myMutableSeq(3) = 600
   //so the below two really should not be needed
   var mySeqThatCanChangedToSomethingElse = Seq(1,2,6,7)
   var mutableAndChangableToSomethingElse = mutable.Seq(1,4,6,7,9)
