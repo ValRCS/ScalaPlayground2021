@@ -61,6 +61,9 @@ object Sequences extends App {
   println(bigSeq.sum/bigSeq.length.toDouble) //so aritmetic mean we want one of the values be Double Long so we get Double Long as result
 
 
+  println(myMutableSeq.sorted)
+  println(myMutableSeq.sorted.reverse)
 
+  println(math.random())
 
 }
