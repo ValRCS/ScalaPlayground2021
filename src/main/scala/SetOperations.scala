@@ -68,8 +68,32 @@ object SetOperations extends App {
   //so we can get a sorted Set, but in general if we want something sorted we want to use Sequence
   val orderedSet = SortedSet.from(bigUnion)
   println(orderedSet)
+  println(orderedSet.count(_ > 5))
+  println(bigUnion.min, bigUnion.max, bigUnion.filter(_ < 3).toSeq)
+  val myTupleSet = bigUnion.map(n => (n.toString, n*10))
+  println(myTupleSet) //guaranteed uniques
+  val myMap = myTupleSet.toMap
+  println(myMap) //so quick lookup by key
+  val mySeq = myTupleSet.toSeq
+  println(mySeq) //so ordered but lookup slower unless you know index
 
-
-
+  //usually you do not need the set for long you go back to Seq or Map once you've done Set operations
+  val zippedSet = bigUnion.zipWithIndex
+  println(zippedSet)
+  //so we have index in 2nd place we want to reverse key value relation
+  val myUnZipMap = zippedSet.map(tup => (tup._2.toString, tup._1)).toMap
+//  val myUnZipMap2 = zippedSet.map({(a,b) => (b,a)}).toMap
+  val firstMatch = bigUnion.find(_ > 3) //should find first match over 3
+  //we get Option since we possible might get Option(None)
+  println(firstMatch.getOrElse("didn't find anything"))
+  println(mySeq.find(_._2 > 3).getOrElse("no match"))
+  println(orderedSet.find(_ > 3).getOrElse("no match here")) //here with ordered we got guaranteed 4 since we had order
+  val groupedValues = bigUnion.groupBy(_ % 3)
+  println(groupedValues)
+  //TODO check syntax on this map operation
+//  val groupedValuesSeq = groupedValues.map((k:Int,v:Set[Int]) => (k,v))
+  val groupedValuesSeq = groupedValues.map(tup => (tup._1,tup._2.toSeq))
+  println(groupedValuesSeq)
+  println(groupedValuesSeq(0)(2)) //66 result - so here we use key for map then index for Seq
 
 }
