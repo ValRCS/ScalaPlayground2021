@@ -27,13 +27,15 @@ object Maps extends App {
 
   val myTuples = mySeq.filter(_._1 == "two") //this would work but has to go through ALL elements of the sequence
   //so if you have billion tuples in your sequence it will have to go through all billion of them
-  println(myTuples(0)._2) //of course it is possible the we didnt find any then myTuples(0) would throw exception
+  println(myTuples.head._2) //of course it is possible the we didnt find any then myTuples(0) would throw exception
 
   //one property of Maps is that keys have to be unique
   for ((key,value) <- myMap) println(s"$key -> $value") //the order of items in a general Map is not guaranteed!
   for(((key,value), index) <- myMap.zipWithIndex) println(s"Item No.$index with $key -> $value") //zero based index
-//  val mySuperSeq = for (((key,value), index) <- myMap.zipWithIndex ) yield ($index, $key, $value) //TODO see if this is possible
-
+  val mySuperSeq = (for (((key,value), index) <- myMap.zipWithIndex ) yield (index, key, value)).toSeq //it is still a List
+  println(mySuperSeq)
+  val newMap = for ((key,value) <- myMap) yield (value.toString, key)
+  println(newMap)
 
   val mutMap = collection.mutable.Map("one" -> 1, "two" -> 2, "three" -> 3)
   //we gain ability to add and remove members of the map, but map stays the same because we use val
@@ -72,9 +74,27 @@ object Maps extends App {
   mutableMapAgain += ("name" -> 7) //can't use string as value because we started out with values being integers
   val mutStringMap = collection.mutable.Map.empty[String,String] //for those cases when we need to start with nothing
   //depreceated += so at some point it will go away
-  mutStringMap += ("name" -> "Valdis", "food" -> "potatoes") //so i can add multiple key value pairs at once as long as types match
+  mutStringMap ++= Map("name" -> "Valdis", "food" -> "potatoes") //so i can add multiple key value pairs at once as long as types match
+  //in above line i made a map on a spot
   println(mutStringMap)
 
   mutableMapAgain ++= myMap //so we can merge into mutable map an immutable map //it will overwite values for matching keys
   println(mutableMapAgain)
+
+  val someSeq = for (n <- 1 to 10) yield (n.toString, n*20)//range is a sequence
+  println(someSeq)
+  val someMap = someSeq.toMap.view.mapValues(_ * 10).toMap
+  println(someMap)
+  //https://stackoverflow.com/questions/25635803/difference-between-mapvalues-and-transform-in-map
+  //so difference between mapvalues and transform is that with transform we can use key also in the value calculation
+  val transformedMap = someMap.transform((k,v) => s"key $k : value: $v")
+  println(transformedMap)
+  //so how about when we want to transform both key and value at once?
+  val mapFromMap = for ((k,v) <- transformedMap) yield (s"V$k", v+10) //so here i concatened(added) string 10 to the end of value
+  println(mapFromMap)
+
+  val mapFromMapAgain = someMap.map({case (key, value) => (s"VV$key", value + 111)})
+  println(mapFromMapAgain)
+
+  //so Maps allow us to access values by key in constant time no matter how large our map is
 }
