@@ -1,6 +1,7 @@
 class House (houseName: String, var heating:String, var hasGarage: Boolean = false) {
   //so blueprint for creating object instances
   //public properties are by default
+  println("the constructor begins")
   val style = "gothic"
   var isForSale = false
   var color = "green"
@@ -19,15 +20,15 @@ class House (houseName: String, var heating:String, var hasGarage: Boolean = fal
   }
   //in many other OOP languages you'd have to specify that these variables/values are from this class object
   //in Scala it is automatic
-  def showSecret() = println(s"My secret is $mySecret")
+  def showSecret(): Unit = println(s"My secret is $mySecret")
   //so called getter
-  def getSecret() = {
+  def getSecret: String = {
     //here would be code for validation, verification, extra security checks and so on
     mySecret
   }
-  def getMutSecret() = mutableSecret
+  def getMutSecret: String = mutableSecret
   //setter
-  def setMutSecret(txt: String) = {
+  def setMutSecret(txt: String): String = {
     // I could check here for txt validity etc.
     mutableSecret = sanitizer(txt)
     "Success!" //I dont have to return anything on setter
@@ -42,5 +43,10 @@ class House (houseName: String, var heating:String, var hasGarage: Boolean = fal
     //well i could do more stuff here
     txt.toLowerCase()
   }
+
+  //we can override existing methods that are built in
+  //for example to have print give out my custom print
+  override def toString: String = s"Object of class: ${getClass.getName} Custom toString house name: $houseName"
+
   println("New object creation finished")
 }

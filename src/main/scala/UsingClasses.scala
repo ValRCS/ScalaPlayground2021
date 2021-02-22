@@ -27,5 +27,25 @@ object UsingClasses extends App {
   castle.prettyPrint() //so prettyPrint was inherited from House
   castle.addNewPainting("No bazn'icas")
 
+  // creating objects from case class does not require new
+  val valdis = Person("Valdis", 45, 180.1, 90, "black")
+  println(valdis)
+  println(valdis.getBMI)
+  valdis.hairColor = "green" //so possible to mutate vars but not the best practice
+  println(valdis)
+  val valdisClone = valdis.copy()
+  println(valdis == valdisClone) //just the top level values are copied
+  valdisClone.hairColor = "red"
+  println(valdis == valdisClone)
+
+  val uljana = Person("Ulja", 60, 214, 120, "gray")
+  println(uljana)
+  println(valdis == uljana)
+  val kristaps = uljana.copy(hairColor = "blonde") // so called shallow copy
+  //this means that references to data outsie are copied only at the top level
+  //in this case the data are primitive so everything is copied
+  println(kristaps == uljana) //so should be false since hairColor changed
+
+
 
 }
