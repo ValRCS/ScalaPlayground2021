@@ -1,6 +1,6 @@
 class Point(val x: Int, val y: Int) {
   //blank constructor for now
-  def formatCoordinates = s"x:$x - y: $y"
+  def formatCoordinates = s"x: $x , y: $y"
   def add(that: Point) = new Point(this.x+that.x, this.y+that.y)
   def +(that: Point) = new Point(this.x+that.x, this.y+that.y)
 }
