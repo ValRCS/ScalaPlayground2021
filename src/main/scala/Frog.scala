@@ -4,7 +4,7 @@ class Animal(val hasVertebrae: Boolean = true) {
 
 //so in scala we can extend a single class or trait
 //then we can add additional traits only with with ... :)
-class Frog extends Animal with Philosophical with HasLegs  {
+class Frog(location: Point) extends Animal with Philosophical with HasLegs  {
   override def toString = "greenie" //rewriting default functionality of toString
 }
 
