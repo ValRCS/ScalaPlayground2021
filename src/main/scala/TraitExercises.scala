@@ -1,4 +1,5 @@
 object TraitExercises extends App {
+  //you can use RandomNums as inspiration
   //TODO generated sequence of 10 random frogs located in 0<=x<=10, 0<=y<=100
   //TODO generate 10 random rectangles with topLeft again from 0 to 100 both coordinates
 
