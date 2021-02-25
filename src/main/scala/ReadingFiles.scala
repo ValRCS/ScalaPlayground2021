@@ -31,4 +31,16 @@ object ReadingFiles extends App {
   val poem_lines = getLinesFromFile(relative_path)
   poem_lines.foreach(println)
 
+  val and_lines = poem_lines.filter(_.startsWith("And"))
+//  val and_lines = poem_lines.filter(line => line.startsWith("And")) //longer syntax
+  and_lines.foreach(println)
+  val and_text = and_lines.mkString("\n") //one big string with newlines in between
+
+  val relative_save_path = "src/resources/two_roads_cleaned.txt"
+  // PrintWriter
+  import java.io._
+  val pw = new PrintWriter(new File(relative_save_path ))
+  pw.write(and_text)
+  pw.close() //when writing it is especially important to close as early as possible
+
 }
