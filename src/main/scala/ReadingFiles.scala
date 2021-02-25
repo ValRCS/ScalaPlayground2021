@@ -19,6 +19,16 @@ object ReadingFiles extends App {
   val lines_tokenized = lines.map(line => line.split(" "))
   lines_tokenized.foreach(line => {line.foreach(println); println("*"*20)})
 
+  //so relative is relative to where our current working directory is
+  val relative_path = "src/resources/two_roads.txt"
 
+  def getLinesFromFile(srcPath: String) = {
+    val bufferedSource = Source.fromFile(srcPath)
+    val lines = bufferedSource.getLines.toArray
+    bufferedSource.close
+    lines
+  }
+  val poem_lines = getLinesFromFile(relative_path)
+  poem_lines.foreach(println)
 
 }
