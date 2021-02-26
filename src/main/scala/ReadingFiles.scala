@@ -19,6 +19,11 @@ object ReadingFiles extends App {
   val lines_tokenized = lines.map(line => line.split(" "))
   lines_tokenized.foreach(line => {line.foreach(println); println("*"*20)})
 
+
+  //let's check our current working directory because we need to know to have correct relative path
+
+  println(System.getProperty("user.dir"))
+
   //so relative is relative to where our current working directory is
   val relative_path = "src/resources/two_roads.txt"
 
@@ -38,7 +43,8 @@ object ReadingFiles extends App {
 
   val relative_save_path = "src/resources/two_roads_cleaned.txt"
   // PrintWriter
-  import java.io._
+  import java.io.{PrintWriter, File} //explicit import
+  //import java.io._ //this was wildcard import meaning we got all of java.io library which we might not need
   val pw = new PrintWriter(new File(relative_save_path ))
   pw.write(and_text)
   pw.close() //when writing it is especially important to close as early as possible
