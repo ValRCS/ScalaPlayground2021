@@ -1,3 +1,4 @@
+import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
 object AnalyzePoetry extends App {
@@ -47,7 +48,36 @@ object AnalyzePoetry extends App {
     //FIXME
     //TODO actually get the real poem titles :)
     //so endswiths, split, some other string functions might help here
-    Map("Valdis" -> Array("3 little pigs", "it was a rainy and dark day"), "Liga" -> Array("Sunny day", "Cloudy day"))
+//    val authorMap = authors.map( author => (author, ArrayBuffer(""))).toMap //in order to use toMap we need a sequence of pairs
+    //so for each authoer we map this author to pair of author and an empty ArrayBuffer with Strings inside
+    //then we use toMap to convert this array of above pairs to Map
+    val authorMap = authors.map( author => (author, ArrayBuffer[String]())).toMap //in order to use toMap we need a sequence of pairs
+
+    var curAuthor = ""
+    for (line <- lines) {
+      //go through lines
+      //if we encounter author we set the curAuthor to this author
+      //if we encounter title we add the title to curauthors ArrayBuffer
+//      if (authors.contains(line.stripMargin)) { //this might help clean up empty spaces
+      if (authors.contains(line)) {
+//        println(s"Found author in $line")
+        curAuthor = line //just keep in mind that we have an exact match if we did not have exact we'd need to find author
+//      } else if (line.length > 2 && line(line.length-2).isDigit && line.endsWith("_") ) { //important that we check line.length first!!!
+      } else if (line.length > 2 && line(line.length-2).isDigit && curAuthor != "") { //important that we check line.length first!!!
+        //we got our title for
+//        println(s"Author $curAuthor and title $line")
+        println(s"Trying to add to author $curAuthor")
+        val titles = authorMap(curAuthor) //basically shortcut to ArrayBuffer, notice it is val but we can add to its contents
+        titles += line
+//        authorMap(curAuthor) += line //would also work
+      }
+    }
+
+    //then we need to convert from  Map[String, ArrayBuffer[String]] to  Map[String, Array[String]]
+    val results = for ((author, titles) <- authorMap) yield (author, titles.toArray)
+
+//    Map("Valdis" -> Array("3 little pigs", "it was a rainy and dark day"), "Liga" -> Array("Sunny day", "Cloudy day"))
+    results
   }
 
 
@@ -56,6 +86,12 @@ object AnalyzePoetry extends App {
     println(s"Author $key ")
     println("Poems")
     value.foreach(println)
+//    value.foreach(title => title.split(" ").foreach(println))
+    //so we split each line on whitespace of any type
+    //so we split by one space + at least some other whitespace
+    //otherwise we would split by each word
+    value.foreach(title => title.split(" \\s+").foreach(println))
+    //so now we split too much
   }
 
 }
