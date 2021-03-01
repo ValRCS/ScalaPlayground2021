@@ -4,7 +4,7 @@ object DownloadFiles extends App {
   val url = "https://www.gutenberg.org/ebooks/25880.txt.utf-8"
 
   import scala.io.Source
-  val txtBuffer = Source.fromURL(url)
+  val txtBuffer = Source.fromURL(url) //so network resources is used here, could take a while for request for big file
 
   //we could have goten just a string without splitting lines by
   //val s = txtBuffer.mkString
