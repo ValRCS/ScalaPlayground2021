@@ -165,10 +165,67 @@ object AnalyzePoetry extends App {
 
   //TODO get only the poem text only use starting line 340
   //end at line 4488
+  val analyzeThis = lines.slice(340,4488) //nice to see those values used as vals
+  val filteredLines = analyzeThis.filter(line => line.length > 1 && line.startsWith("  ") && !line.trim.startsWith("_"))
 
-  //start with a a slice of lines then filter
+  //run THIS line and get only poem lines with nothing else
+  //filters out names, titles, roman numbers and * * *
+  val noCaps_1 = filteredLines.filter(line => line.toUpperCase != line)
+//  noCaps_1.foreach(println)
 
-  //if you are feeling comfortable add also add authors and titles
-  //can use startsWith toUpperCase, contains, trim,
+  //method for filtering out roman numbers and that one * * * place
+  //this keeps author names and poem names in place
+  val pattern = "IVX* "
+  val noCaps = filteredLines.filter(line => !line.toSet.subsetOf(pattern.toSet)) //so this means that "VIX* " also would be filtered out
+//  noCaps.foreach(line => println(line.trim))
 
+  def getPoemText(lines: Array[String]): Array[String] = {
+//    lines.filter(line => !line.toUpperCase == line && line.length != 0))
+    lines.filter(line => !(line.toUpperCase == line || line.length == 0))
+  }
+
+  val poemTextOnly = getPoemText(lines.slice(340,4488))
+  poemTextOnly.foreach(println)
+
+  val poems = lines.slice(340,4488).filter(line => line.startsWith("  ")).map(_.trim) //so we trim each line
+
+  val savePoems = poems.mkString("\n") //joining our array of strings back into one big string
+  val relative_save_path = "src/resources/poetry_only_poems.txt"
+  import java.io.{PrintWriter, File}
+  val pw = new PrintWriter(new File(relative_save_path ))
+  pw.write(savePoems)
+  pw.close()
+
+  val onlyPageNumbers = lines.filter(line => line.matches(""".+_\d+_""")) //using triple quotes because we do not want to escape special characters
+  onlyPageNumbers.foreach(println)
+
+  //now lets extract title and the page number exactly
+  //https://alvinalexander.com/scala/how-to-extract-parts-strings-match-regular-expression-regex-scala/
+//using regex101.com or similar page to experiment with matches
+  val regEx = """(.+)_(\d+)_""".r //notice the .r !!
+//  val poemPagesProcessed = onlyPageNumbers.map(line => regEx(title,page) = line)
+  val poemPagesProcessed = for (line <- onlyPageNumbers) yield {
+    val regEx(title, page) = line
+    (title, page)
+  }
+  poemPagesProcessed.foreach(println)
+
+  //cleanup, sadly we had to use whole myTuple instead of unpacking tuple with (title, pageNum)
+  val poemPagesTrimmed = poemPagesProcessed.map(myTuple => (myTuple._1.trim, myTuple._2.trim))
+  poemPagesTrimmed.foreach(println)
+
+  val dedications = lines.filter(line => line.matches(".*\\(.+\\).*")) //so intelleji did the double escaping for us here if we do not use """
+  dedications.foreach(println)
+
+  //we could get a more universal regex for phone extraction here
+  //https://stackoverflow.com/questions/16699007/regular-expression-to-match-standard-10-digit-phone-number
+  val phoneNumbers = lines.filter(line => line.matches(".*\\d{3}.{0,2}\\d{3}.{0,2}\\d{4}.*"))
+  println(s"Got ${phoneNumbers.length} lines with phone numbers")
+  phoneNumbers.foreach(println)
+  val justPhoneRegEx = """.*(.\d{3}.{0,2}\d{3}.{0,2}\d{4}).*""".r
+  val phones = phoneNumbers.map(line => {
+    val justPhoneRegEx(phone) = line
+    phone
+  })
+  phones.foreach(println)
 }
