@@ -224,7 +224,7 @@ object AnalyzePoetry extends App {
   phoneNumbers.foreach(println)
   val justPhoneRegEx = """.*(.\d{3}.{0,2}\d{3}.{0,2}\d{4}).*""".r
   val phones = phoneNumbers.map(line => {
-    val justPhoneRegEx(phone) = line
+    val justPhoneRegEx(phone) = line //a bit of strange syntax but it creates the results in phone from line given your regex
     phone
   })
   phones.foreach(println)
