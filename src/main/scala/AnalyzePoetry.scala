@@ -125,4 +125,48 @@ object AnalyzePoetry extends App {
   println("*"*40)
   noSubTitles.foreach(println)
 
+  def extractUnderscoreText(s: String):String = s match {
+    case s"${head}_${target}_$tail" => s"HEAD: $head, TARGET: $target, TAIL: $tail" //we  need curly bracers to indicate that _ is not part of variable
+    case _ => "no match" //default one
+  }
+
+  val underscoreLines = lines.filter(line => extractUnderscoreText(line) != "no match")
+  underscoreLines.foreach(println)
+
+  //how about transforming data first? and filter later?
+
+  val transformedText = lines.map(extractUnderscoreText) //shortest
+//  val transformedText = lines.map(extractUnderscoreText(_))
+//  val transformedText = lines.map(line => extractUnderscoreText(line)) //full syntax
+
+//  transformedText.foreach(println)
+  val transformedFilteredText = transformedText.filter(_ != "no match")
+  transformedFilteredText.foreach(println)
+
+  def getAuthorsTitles(lines: Array[String]):Unit = {
+    var emptyCount = 0
+    val authorCount = 3
+    val titleCount = 4
+    //idea we count empty lines and reset counter upon first non empty
+    //if this non empty line has uppercase we can decide on whether that is author or title
+    for (line <- lines) {
+      if (line.trim.length == 0) emptyCount += 1
+      else if (line.toUpperCase == line) {
+        if (emptyCount == authorCount) println(s"AUTHOR: $line") //if we wanted to save the results we could use ArrayBuffer or such
+        else if (emptyCount == titleCount) println(s"TITLE: $line")
+        emptyCount = 0
+      } else emptyCount = 0 //could rewrite if logic a bit to get rid of double emptyCount = 0
+
+    }
+  }
+
+  getAuthorsTitles(lines)
+
+  //TODO get only the poem text only use starting line 340
+  //end at line 4488
+
+  //start with a a slice of lines then filter
+
+  //if you are feeling comfortable add also add authors and titles
+
 }
