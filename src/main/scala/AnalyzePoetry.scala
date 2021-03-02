@@ -94,4 +94,18 @@ object AnalyzePoetry extends App {
     //so now we split too much
   }
 
+  def removeEmptyLines (lines: Array[String]): Array[String] = {
+//    val subResult = lines.filter(_.length > 1) //for single comparison check
+    val subResult = lines.filter(line => line.length > 1) //for more complicated checks
+    subResult
+  }
+
+  println("*"*40)
+
+  val noEmptyLines = removeEmptyLines(lines.slice(164,334))
+  noEmptyLines.foreach(println)
+  val noSubTitles = noEmptyLines.filter(line => !line.trim.startsWith("_"))
+  println("*"*40)
+  noSubTitles.foreach(println)
+
 }
