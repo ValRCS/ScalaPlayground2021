@@ -82,17 +82,17 @@ object AnalyzePoetry extends App {
 
 
   val poemTitles = getPoemTitles(linesToProcess, authors)
-  for ((key, value) <- poemTitles) {
-    println(s"Author $key ")
-    println("Poems")
-    value.foreach(println)
-//    value.foreach(title => title.split(" ").foreach(println))
-    //so we split each line on whitespace of any type
-    //so we split by one space + at least some other whitespace
-    //otherwise we would split by each word
-    value.foreach(title => title.split(" \\s+").foreach(println))
-    //so now we split too much
-  }
+//  for ((key, value) <- poemTitles) {
+//    println(s"Author $key ")
+//    println("Poems")
+//    value.foreach(println)
+////    value.foreach(title => title.split(" ").foreach(println))
+//    //so we split each line on whitespace of any type
+//    //so we split by one space + at least some other whitespace
+//    //otherwise we would split by each word
+//    value.foreach(title => title.split(" \\s+").foreach(println))
+//    //so now we split too much
+//  }
 
   def removeEmptyLines (lines: Array[String]): Array[String] = {
 //    val subResult = lines.filter(_.length > 1) //for single comparison check
@@ -102,7 +102,24 @@ object AnalyzePoetry extends App {
 
   println("*"*40)
 
-  val noEmptyLines = removeEmptyLines(lines.slice(164,334))
+  //ideally i'd like to get rid of these hardcoded values
+
+  val needle = "Amy Lowell" //also we do not know the case, but we know thats where we want to start
+
+  def findNeedle(lines: Array[String], needle:String) :Int = {
+    var lineNumber = -1 //our line indexes start with 0
+    for ((line, index) <- lines.zipWithIndex) {
+      if (lineNumber == -1 && line.toLowerCase.contains(needle.toLowerCase)) //so this way we only find first occurence
+        lineNumber = index //optimization would be to return immediately when work is done
+      //we could have save all the matches for particular line number
+    }
+    lineNumber
+  }
+  val startLine = findNeedle(lines, needle)
+  val endLine = findNeedle(lines, "bibliography")
+  println(s"We will start at line: $startLine and end at $endLine")
+
+  val noEmptyLines = removeEmptyLines(lines.slice(startLine,endLine))
   noEmptyLines.foreach(println)
   val noSubTitles = noEmptyLines.filter(line => !line.trim.startsWith("_"))
   println("*"*40)
