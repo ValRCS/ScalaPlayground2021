@@ -125,6 +125,7 @@ object AnalyzePoetry extends App {
   println("*"*40)
   noSubTitles.foreach(println)
 
+
   def extractUnderscoreText(s: String):String = s match {
     case s"${head}_${target}_$tail" => s"HEAD: $head, TARGET: $target, TAIL: $tail" //we  need curly bracers to indicate that _ is not part of variable
     case _ => "no match" //default one
@@ -168,5 +169,6 @@ object AnalyzePoetry extends App {
   //start with a a slice of lines then filter
 
   //if you are feeling comfortable add also add authors and titles
+  //can use startsWith toUpperCase, contains, trim,
 
 }
