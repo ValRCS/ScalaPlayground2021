@@ -19,16 +19,5 @@ object DownloadFiles extends App {
 
   val relative_save_path = "src/resources/poetry_1922.txt"
 
-
-  def saveLines(lines: Array[String], destPath: String, sep: String = "\n"): Unit = {
-    val txt = lines.mkString(sep)
-
-    import java.io.{PrintWriter, File} //explicit import
-    //import java.io._ //this was wildcard import meaning we got all of java.io library which we might not need
-    val pw = new PrintWriter(new File(destPath ))
-    pw.write(txt)
-    pw.close()
-  }
-
-  saveLines(lines, relative_save_path) //let's try with default "\n" separator
+  Utilities.saveLines(lines, relative_save_path) //let's try with default "\n" separator
 }

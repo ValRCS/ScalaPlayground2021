@@ -9,19 +9,14 @@ object AnalyzePoetry extends App {
 
   val default_path = "src/resources/two_roads.txt"
 
-  val real_path = if (args.size > 0 ) args(0) else default_path
+  val real_path = if (args.length > 0 ) args(0) else default_path
 
   println(s"Will open files from $real_path")
 
-  def getLinesFromFile(srcPath: String) = {
-    val bufferedSource = Source.fromFile(srcPath)
-    val lines = bufferedSource.getLines.toArray
-    bufferedSource.close
-    lines
-  }
 
-  val lines = getLinesFromFile(real_path)
-  println(s"We have ${lines.size} lines in our $real_path file")
+
+  val lines = Utilities.getLinesFromFile(real_path)
+  println(s"We have ${lines.length} lines in our $real_path file")
 
   lines.slice(340,360).foreach(println)
 
@@ -106,17 +101,9 @@ object AnalyzePoetry extends App {
 
   val needle = "Amy Lowell" //also we do not know the case, but we know thats where we want to start
 
-  def findNeedle(lines: Array[String], needle:String) :Int = {
-    var lineNumber = -1 //our line indexes start with 0
-    for ((line, index) <- lines.zipWithIndex) {
-      if (lineNumber == -1 && line.toLowerCase.contains(needle.toLowerCase)) //so this way we only find first occurence
-        lineNumber = index //optimization would be to return immediately when work is done
-      //we could have save all the matches for particular line number
-    }
-    lineNumber
-  }
-  val startLine = findNeedle(lines, needle)
-  val endLine = findNeedle(lines, "bibliography")
+
+  val startLine = Utilities.findNeedle(lines, needle)
+  val endLine = Utilities.findNeedle(lines, "bibliography")
   println(s"We will start at line: $startLine and end at $endLine")
 
   val noEmptyLines = removeEmptyLines(lines.slice(startLine,endLine))
@@ -191,6 +178,8 @@ object AnalyzePoetry extends App {
 
   val savePoems = poems.mkString("\n") //joining our array of strings back into one big string
   val relative_save_path = "src/resources/poetry_only_poems.txt"
+
+
   import java.io.{PrintWriter, File}
   val pw = new PrintWriter(new File(relative_save_path ))
   pw.write(savePoems)
@@ -228,4 +217,36 @@ object AnalyzePoetry extends App {
     phone
   })
   phones.foreach(println)
+
+  //good reading https://www.baeldung.com/scala/find-index-element-in-list
+  //we will get line number and the actual line which interest us
+  //pair is just a name to indicate a tuple with 2 values
+  val frostLines = lines.zipWithIndex.filter(pair => pair._1.matches(".*FROST.*"))
+  frostLines.foreach(println)
+  //I could have chained the following after matches but for clarity storing the intermediate results
+  val cleanFrost = frostLines.map(pair => (pair._1.trim, pair._2+1)) //so removing whitespace to text and increasing index to match page number
+  cleanFrost.foreach(println)
+
+  //this only picks up emails in form of email00@domain.tld
+  val simpleEmailRegEx = """.*\b(\w+@\w+.\w+).*""" //for matching it does not need the regex type just a string
+
+
+  val emailLines = lines.filter(line => line.matches(simpleEmailRegEx))
+  emailLines.foreach(println)
+
+  val emailPattern = """\w+@\w+.\w+""".r //you'd use a more complex pattern for more complex emails
+
+  //so we can go through lines one by one her we know line 3(index 2) has the 3 emails
+  val emailMatches = emailPattern.findAllMatchIn(emailLines(2)).toArray //without toArray we get Iterator(lazy on demand)
+  emailMatches.foreach(println)
+  //how to get out all emails
+  println("**** All emails **** ")
+  //simplest would be to sticky all the filters lines back before getting the emails out
+
+  val allEmails = emailPattern.findAllIn(emailLines.mkString("\n")).toArray
+  allEmails.foreach(println)
+
+  //we can use saveLines  utility method/function from our sibling Object in the same project
+  Utilities.saveLines(allEmails, "./src/resources/emails.txt")
+
 }
