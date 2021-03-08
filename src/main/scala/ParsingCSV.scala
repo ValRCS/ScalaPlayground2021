@@ -25,7 +25,7 @@ object ParsingCSV extends App{
   val carrotMax = carrotPrices.max
   val carrotAvg = carrotPrices.sum / carrotPrices.length
 
-  println(s"Carrots in UK: top price ${carrotMax} , lowest ${carrotMin} and average is ${carrotAvg}")
+  println(s"Carrots in UK: top price $carrotMax , lowest $carrotMin and average is $carrotAvg")
 
   //TODO convert our Array of Array of strings into Array of PriceEntries
 
@@ -48,17 +48,28 @@ object ParsingCSV extends App{
     val filteredProduce = produceArray.filter(line => line.variety.contains(itemName))
     //Scala discourages early return but we can do it here
     //sometimes early return might make things simpler
-    if (filteredProduce.length == 0) return s"Can't find ${itemName} Nothing to calculate!"
+    if (filteredProduce.length == 0) return s"Can't find $itemName Nothing to calculate!"
 
     val prices = filteredProduce.map(produce => produce.price)
     val minPrice = prices.min
     val maxPrice = prices.max
     val meanPrice = prices.sum / prices.length
-    s"Produce ${itemName} min price ${minPrice} max: ${maxPrice} average: ${meanPrice}"
+    s"Produce $itemName min price $minPrice max: $maxPrice average: $meanPrice"
   }
 
   println(getProduceStats(beets))
 
   println(getProduceStats(produceArray, "apples"))
   println(getProduceStats(produceArray, "gala"))
+
+
+  //TODO get pricing for tulips
+
+  //extra challenge for those who are already comfortable
+  //TODO get stats for tulips for each year from 2015 to 2021
+
+  //TODO get 3 top prices
+
+
+  //TODO after break we will get results including the date
 }
