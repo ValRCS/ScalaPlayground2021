@@ -1,6 +1,6 @@
 category,item,variety,date,price,unit
-fruit,apples,bramleys_seedling,2021-03-05,1,kg
-fruit,apples,coxs_orange_group,2021-03-05,1.39,kg
+fruit,apples,bramleys_seedling,2021-03-05   ,1,  kg
+fruit,apples,coxs_orange_group  ,2021-03-05,1.39,kg
 fruit,apples,egremont_russet,2021-03-05,1.25,kg
 fruit,apples,braeburn,2021-03-05,0.99,kg
 fruit,apples,gala,2021-03-05,1.03,kg
