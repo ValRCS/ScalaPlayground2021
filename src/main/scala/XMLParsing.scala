@@ -64,11 +64,62 @@ object XMLParsing extends App {
 
   //you have the whole xml stored in val xml
   //TODO get text contents of subType
+
+  val subTypes = xml \ "subType"
+  subTypes.foreach(subType => println(subType.text))
   //remember that most matches are in some sort of sequence because in XML you could have multiple matches
   //TODO get size attribute for each file (this is in bytes)
+  val fileSize = xml \ "files" \ "file"
+  val fileSizeBytes = for (file <- fileSize) yield file.attribute("size").getOrElse("_")
+  println("FileSize in Bytes")
+  fileSizeBytes.foreach(println)
 
-  //We will do this after 21:00
+
   //TODO hardest challenge get size in KBytes from each files <fileMetadata><field name="Size">228 KB</field> .... </fileMetadata>
+  val allFields = xml \ "files" \ "file" \ "fileMetadata" \ "field"
+//  for (field <- allFields) println(field.attribute("name").getOrElse(""))
+//  val allFieldSizes = for (field <- allFields) yield field.attribute("name").getOrElse("")
+  println(s"allFieldSizes ${allFields.length}")
 
+
+  //we had to get convert our value to string
+  val allSizes = allFields.filter(field => field.attribute("name").getOrElse("").toString == "Size")
+  println(s"We got field elements which have attribute name value Size  ${allSizes.length}")
+  allSizes.foreach(println)
+  val kbSizes = allSizes.map(node => node.text)
+  kbSizes.foreach(println)
+  //We will do this after 21:00
+
+
+//  val allNames = xml \ "files" \ "file" \ "fileMetadata" \ "field" \ "@name"
+//  println(s"We have fields with name attribute ${allNames.length}")
+
+  val fieldData = xml \\ "field" //so we get all children/grandchildren etc of whole xml with tag named field
+  val filtered = for(node <- fieldData if node.text.contains("KB")) yield node
+  filtered.foreach(node => println(node.text))
+
+  val bookPath = "./src/resources/books.xml"
+
+  val bookXML = XML.loadFile((bookPath))
+
+  def nodeToBook(node: scala.xml.Node):Book = {
+    val title = (node \ "title") .text
+    val author = (node \ "author") .text
+    val year = (node \ "year" ).text.toInt
+    val price = (node \ "price").text.toDouble
+    val category = node.attribute("category").getOrElse("NO CATEGORY").toString
+    Book(title,author, year, price, category)
+  }
+  val bookNodes = bookXML \ "book"
+  val books = bookNodes.map(node => nodeToBook(node))
+  books.foreach(println)
+  //so now our books are ready to be transferred to database or CSV or some other data structrure
+  //even gasp back to XML :)
+//    <book category="children">
+  //        <title>Harry Potter</title>
+  //        <author>J K. Rowling</author>
+  //        <year>2005</year>
+  //        <price>29.99</price>
+  //    </book>
 
 }
