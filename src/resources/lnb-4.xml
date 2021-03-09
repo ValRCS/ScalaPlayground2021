@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<digitalObject xmlns="https://dom.lndb.lv" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://dom.lndb.lv https://dom.lndb.lv/data/subtype/photo.xsd" id="4" version="10" versionId="1048345">
+  <uri>https://dom.lndb.lv/data/obj/4</uri>
+  <type code="Image">Attēls</type>
+  <subType code="Photo">Fotogrāfija</subType>
+  <isShownAt>https://dom.lndb.lv/data/obj/4.html</isShownAt>
+  <thumbnail>https://dom.lndb.lv/data/obj/4.png</thumbnail>
+  <title>Rīga. Melngalvju nams</title>
+  <dateCreated>[191-]</dateCreated>
+  <formatExtent>1 fotogrāfija</formatExtent>
+  <formatMedium classifier="MediaFormat" classifierId="31" uri="https://dom.lndb.lv/data/clas/MediaFormat#31">Fotopapīrs</formatMedium>
+  <subject thesaurus="GenreFormTerms" thesaurusId="259911" uri="https://dom.lndb.lv/data/auth/259911">Fotogrāfijas</subject>
+  <subject thesaurus="Subjects" thesaurusId="151142" uri="https://dom.lndb.lv/data/auth/151142">Pieminekļi</subject>
+  <subject thesaurus="Subjects" thesaurusId="159722" uri="https://dom.lndb.lv/data/auth/159722">Pilsētas laukumi</subject>
+  <subject thesaurus="Places" thesaurusId="159866" uri="https://dom.lndb.lv/data/auth/159866">Rātslaukums (Rīga, Latvija)</subject>
+  <subject thesaurus="Subjects" thesaurusId="157883" uri="https://dom.lndb.lv/data/auth/157883">Ģilžu ēkas -- Latvija</subject>
+  <subject thesaurus="Institutions" thesaurusId="157890" uri="https://dom.lndb.lv/data/auth/157890">Melngalvju nams (Rīga, Latvija)</subject>
+  <subject thesaurus="Persons" thesaurusId="124878" uri="https://dom.lndb.lv/data/auth/124878">Neumann, Wilhelm, 1849-1919</subject>
+  <subject thesaurus="Subjects" thesaurusId="140180" uri="https://dom.lndb.lv/data/auth/140180">Arhitekti</subject>
+  <geographicName thesaurus="Places" thesaurusId="120265" uri="https://dom.lndb.lv/data/auth/120265">Vecrīga (Rīga, Latvija)</geographicName>
+  <geographicName thesaurus="Places" thesaurusId="119733" uri="https://dom.lndb.lv/data/auth/119733">Latvija</geographicName>
+  <abstract lang="lav">Rakstu avotos nams pirmoreiz minēts 1334. gadā, vēlāk vairākkārt pārbūvēts un paplašināts, tomēr abos nama zelmiņos bija uzglabājušies daudzi elementi no sākotnējās 14.–15. gs. būves. Lielākās pārmaiņas nama arhitektoniskajā veidolā ienesa starp nama ZA garensienu un līdzās esošo veco noliktavu 1793.–1794. gadā uzceltā divstāvu piebūve (tās apakšstāvā bija kastelāna dzīvoklis un saimniecības telpas, bet 2. stāvā – ēdamzāle un t. s. konferenču istaba). 1843. gadā celts jauns Melngalvju nama portāls. Ap šo laiku nojaukti vecie veikali un noliktavas pie Melngalvju nama fasādes un to vietā izbūvētas jaunas veikalu telpas. Melngalvji bija neprecētu, kara kalpībai derīgu patriciešu biedrība, kurai pamati bija likti 1416. gadā. Šīs brālības patrons bija Sv. Maurīcijs, teiksmainā Tēbu leģiona tumšādainais pavēlnieks, kas, atsakoties paklausīt kādam rīkojumam, mira mocekļa nāvē. Melngalvju sabiedrība (vēlāk biedrība "Melngalvju kompānija") pastāvēja līdz 1939. gadam, kad to likvidēja, vācu tautības pilsoņiem izceļojot. 20. gadsimta 20., 30. gados greznajā Melngalvju nama zālē, kas izcēlusies ar sevišķi labu akustiku, notika koncerti, tur, viesojoties Ljā, uzstājušies vairāki ievērojami mūziķi un dziedātāji. 1921. gadā Melngalvju nama zālē tika noslēgts un parakstīts Polijas–Padomju Krievijas miera līgums. Pēc 1941. gada ugunsgrēka, kad no tuvējām degošām ēkām vēja nestās dzirksteles aizdedzināja granātas eksplozijā atsegtās Melngalvju nama jumta konstrukcijas sausos kokus, visvairāk bija cietusi nama galvenā fasāde un pirmā stāva piebūve Rātslaukuma pusē, lai gan ieejas portālu rotājošie 16. gadsimta bareljefi ar Sv. Maurīcija un Madonnas tēliem bija palikuši pilnīgi neskarti. Bija saglabājušies arī nama un 18. gadsimta piebūves mūri pie Mazās Grēcinieku ielas un nama aizmugures zelminis pret Svaru ielu. Lai nodrošinātu ēkas mūrus pret tālāku bojāšanos, Rīgas pilsētas būvvalde veica mūru nostiprināšanu, izbūvējot īpašu atbalsta konstrukciju pret aizmugures zelmini un daļu ēkas pārsedzot ar pagaidu jumtu. Pēc Otrā pasaules kara Melngalvju nama, tāpat apkārtējo, vairāk vai mazāk cietušo ēku drupas tika novāktas, turklāt nama vecie mūri 1948. gadā, lai tos vieglāk nojauktu, tika pat spridzināti. Melngalvju nams uzbūvēts no jauna - 1996. gada 21.maijā tika ielikts pamatakmens, nams atklāts 1999. gada 9.decembrī. Nams tiek izmantots kopā ar atjaunoto „Švābes namu” un Zilās gvardes namu</abstract>
+  <locationOrganization classifier="LocationOrganization" classifierId="37" uri="https://dom.lndb.lv/data/clas/LocationOrganization#37">Latvijas Nacionālā bibliotēka</locationOrganization>
+  <locationDepartment classifier="LocationDepartment" classifierId="274" uri="https://dom.lndb.lv/data/clas/LocationDepartment#274">Letonikas un Baltijas centrs. Baltijas Centrālās bibliotēkas kolekcija</locationDepartment>
+  <locationCode>R0212</locationCode>
+  <isPartOfCollection digitalObjectId="5" uri="https://dom.lndb.lv/data/obj/5">Zudusī Latvija</isPartOfCollection>
+  <dataProvider>Latvijas Nacionālā bibliotēka</dataProvider>
+  <url>http://www.zudusilatvija.lv/admin/objects/photoobject/26206/</url>
+  <place>Rīga</place>
+  <year>1910</year>
+  <dateCaptured>2019-09-26</dateCaptured>
+  <dateModified>2019-09-26</dateModified>
+  <copyright code="Copyrighted">Ir aizsargāts ar autortiesībām</copyright>
+  <accessRight code="AllowPublic">Pieejams tīmeklī</accessRight>
+  <files>
+    <file id="4343" type="Access" mimeType="image/jpeg" name="R0212_012_0_work.jpg" size="234050" hash="304281cf32ca24f92c85e18a8662c58d" generated="false" digitalObjectVersionId="1356">
+      <uri>https://dom.lndb.lv/data/obj/file/4343</uri>
+      <fileMetadata>
+        <field name="Type">JPEG image</field>
+        <field name="Name">4343.jpg</field>
+        <field name="Size">228 KB</field>
+        <field name="Content created">06.06.2013 09:50:40</field>
+        <field name="Date last saved">06.06.2013 09:50:40</field>
+        <field name="Width">1600 pixels</field>
+        <field name="Height">1016 pixels</field>
+        <field name="Horizontal resolution">96 dpi</field>
+        <field name="Vertical resolution">96 dpi</field>
+        <field name="Bit depth">24</field>
+        <field name="Dimensions">1600 x 1016</field>
+        <field name="Perceived type">Image</field>
+        <field name="Date">06.06.2013 09:50:40</field>
+        <field name="Kind">Picture</field>
+        <field name="Date imported">06.06.2013 09:50:40</field>
+      </fileMetadata>
+    </file>
+    <file id="1" type="Archive" mimeType="image/jpeg" name="R0212_012_0.jpg" size="100090" hash="031768eb690c4ce5f3e39ecadd7b24ea" generated="false" digitalObjectVersionId="4">
+      <displayOrder>1</displayOrder>
+      <fileMetadata>
+        <field name="Type">JPEG image</field>
+        <field name="Name">1.jpg</field>
+        <field name="Size">97,7 KB</field>
+        <field name="Content created">16.04.2013 11:56:02</field>
+        <field name="Date last saved">16.04.2013 11:56:02</field>
+        <field name="Width">800 pixels</field>
+        <field name="Height">508 pixels</field>
+        <field name="Horizontal resolution">96 dpi</field>
+        <field name="Vertical resolution">96 dpi</field>
+        <field name="Bit depth">24</field>
+        <field name="Dimensions">800 x 508</field>
+        <field name="Perceived type">Image</field>
+        <field name="Date">16.04.2013 11:56:02</field>
+        <field name="Kind">Picture</field>
+        <field name="Date imported">16.04.2013 11:56:02</field>
+      </fileMetadata>
+    </file>
+  </files>
+</digitalObject>
