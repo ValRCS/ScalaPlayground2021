@@ -40,6 +40,12 @@ object LargestIncrease extends App {
   println(findBiggestIncrease(integers))
 
   //TODO solve biggest increase in so called Linear time - meaning single loop
+  //it could actually be a couple loops but the key being that they are not nested
+  //so 3 loops in a row (not within each other) would still be Linear
+  //because number 3 does not change as more data is added
+
+  //in this case we only need 1 loop (but if you need 2 loops that's finetoo).
+
   //meaning our calculations grow linearly as more data is added
   //our brute force solution is so called quadratic meaning
   // our complexity grows quadratically based on our data, this is so called O(n^2) complexity
