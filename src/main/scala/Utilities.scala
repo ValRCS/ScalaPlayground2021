@@ -39,4 +39,22 @@ object Utilities {
     //much shorter way of writing the above is using indexWhere
     lines.indexWhere(line => line.toLowerCase.contains(needle.toLowerCase))
   }
+
+  def getRandomIntSeq(count: Int = 1000, min: Int = 0, max: Int = 100_000) :Seq[Int]= {
+    val r = scala.util.Random
+    //TODO check if we need to add + 1
+    for (_ <- 1 to count ) yield min + r.nextInt(max-min+1) //we are using _ since we do not need index here
+  }
+
+  def saveIntSeq(ints: Seq[Int], destPath: String): Unit = {
+//    val lines = ints.map(_.asInstanceOf[String]).toArray //so we had to cast to Scala string each member
+//    //and cast lines to array
+//    saveLines(lines, destPath)
+    //Above would utilize existing function we made
+    val txt = ints.mkString("\n")
+    import java.io.{PrintWriter, File} //explicit import
+    val pw = new PrintWriter(new File(destPath ))
+    pw.write(txt)
+    pw.close()
+  }
 }
