@@ -45,7 +45,7 @@ object LargestIncrease extends App {
 //    var max = ints(0)
     var relativeWinner = 0
     var absoluteWinner = 0
-    for ((n, i) <- ints.tail.zipWithIndex) {
+    for (n <- ints.tail) { //in some data structures tail operation could be slow
       val delta = n - min //this should work because ints indexing is one less than our values
       if (delta > relativeWinner) relativeWinner = delta
       if (relativeWinner > absoluteWinner) absoluteWinner = relativeWinner
@@ -74,6 +74,22 @@ object LargestIncrease extends App {
   println("Elapsed time: " + (t1 - t0) + "ns")
 
   println(s"Biggest Increase is $increase1 == $increase2")
+
+  val int100k = Utilities.getLinesFromFile("./src/resources/my100k.txt").map(_.toInt)
+  println(int100k.min, int100k.max, int100k.max-int100k.min)
+
+  t0 = System.nanoTime()
+  val increase3 = findBiggestIncreaseLin(int100k)
+  t1 = System.nanoTime()
+  println("Elapsed time: " + (t1 - t0) + "ns")
+
+  //this should take a while on 100k....
+  t0 = System.nanoTime()
+  val increase4 = findBiggestIncrease(int100k)
+  t1 = System.nanoTime()
+  println("Elapsed time: " + (t1 - t0) + "ns")
+
+  println(s"Biggest Increase is $increase3 == $increase4")
 
 
 

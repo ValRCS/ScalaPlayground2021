@@ -6,11 +6,14 @@ object RandomTest extends App {
   println(myNumbers.min)
   println(myNumbers.length)
 
-  val mySmallNumbers= Utilities.getRandomIntSeq(1_000_000, 15,20)
+  val mySmallNumbers= Utilities.getRandomIntSeq(100_000, 0,1_000_000)
   println(mySmallNumbers.max)
   println(mySmallNumbers.min)
   println(mySmallNumbers.length)
-  println(mySmallNumbers.sum.toDouble / mySmallNumbers.length)
+  println(s"Regular signed integer max is: ${Int.MaxValue}")
+  println(s"Regular LOOOONG integer max is: ${Long.MaxValue}")
+  println(mySmallNumbers.map(_.toLong).sum.toDouble / mySmallNumbers.length)
 
-  Utilities.saveIntSeq(myNumbers, "./src/resources/myInts.txt")
+//  Utilities.saveIntSeq(myNumbers, "./src/resources/myInts.txt")
+  Utilities.saveIntSeq(mySmallNumbers, "./src/resources/my100k.txt")
 }
