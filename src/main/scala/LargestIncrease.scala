@@ -78,19 +78,39 @@ object LargestIncrease extends App {
   val int100k = Utilities.getLinesFromFile("./src/resources/my100k.txt").map(_.toInt)
   println(int100k.min, int100k.max, int100k.max-int100k.min)
 
-  t0 = System.nanoTime()
-  val increase3 = findBiggestIncreaseLin(int100k)
-  t1 = System.nanoTime()
-  println("Elapsed time: " + (t1 - t0) + "ns")
+
 
   //this should take a while on 100k....
   t0 = System.nanoTime()
   val increase4 = findBiggestIncrease(int100k)
   t1 = System.nanoTime()
-  println("Elapsed time: " + (t1 - t0) + "ns")
+  println("Elapsed time for brute force: " + (t1 - t0) + "ns")
+
+  t0 = System.nanoTime()
+  val increase3 = findBiggestIncreaseLin(int100k)
+  t1 = System.nanoTime()
+  println("Elapsed time for linear version: " + (t1 - t0) + "ns")
 
   println(s"Biggest Increase is $increase3 == $increase4")
 
+
+  def findBiggestIncreaseLinImproved(ints: Seq[Int]):Int = {
+    var min = ints(0)
+    var winner = 0
+    for (n <- ints.tail) { //in some data structures tail operation could be slow
+      val delta = n - min //this should work because ints indexing is one less than our values
+      if (delta > winner) winner = delta
+      if (n < min) min = n //so we have a new minimum we need to start keeping track of new records for diff
+    }
+    winner
+  }
+
+  t0 = System.nanoTime()
+  val increase5 = findBiggestIncreaseLinImproved(int100k)
+  t1 = System.nanoTime()
+  println("Elapsed time for improved Linear version: " + (t1 - t0) + "ns")
+
+  println(s"Biggest Increase is $increase5 == $increase4 == $increase3")
 
 
   //it could actually be a couple loops but the key being that they are not nested
