@@ -3,6 +3,13 @@ import scala.io.Source
 object Utilities {
   //not going to run it as such just use it for storing Utility functions/methods used in other objects / classes
   //I am using Object to store these because I do not need multiple copies
+  def saveUrlToFile(url:String, folder:String = "./src/resources/"):Unit = {
+    //TODO make a function which loads resource from url and
+    // gets the last part of url and uses that to save into folder
+    //you can use example from DownloadFiles
+    //only challenge is to exract last part from the url and add it to folder
+  }
+
   def getLinesFromFile(srcPath: String): Array[String] = {
     val bufferedSource = Source.fromFile(srcPath)
     val lines = bufferedSource.getLines.toArray
