@@ -7,6 +7,25 @@ object CookBook extends App {
   //  val dstName = "13177-8-results.txt"
 
   val url = "https://www.gutenberg.org/files/13177/13177-8.txt"
+  val destination = Utilities.getFilePathFromUrl(url)
+  println(destination)
+
+  import java.nio.file.{Paths, Files}
+  if (Files.exists(Paths.get(destination))) println(s"$destination already exists")
+  else Utilities.saveUrlToFile(url, destination,"iso-8859-1")
+
+  val lines = Utilities.getLinesFromFile(destination)
+  println(s"Got ${lines.length} from $destination")
+
+  //goal is to avoid the magic numbers
+  val start = 1024 //better get it by find
+  val end = 3045
+  val filtered = lines.slice(start,end).filter(line => line.toUpperCase == line || line.startsWith("    "))
+//  val noEmptyLines = filtered.filter(line => line.trim != line) //this should clean all extra whitespace line
+  val noEmptyLines = filtered.filter(line => line.length > 1) //this should clean all extra whitespace line
+  Utilities.saveLines(noEmptyLines, "./src/resources/recipes-test.txt")
+
+//  Utilities.saveUrlToFile(url)
 ////  val srcName = "c:/temp/13177-8.txt"
 ////  val dstName = "c:/temp/13177-8-cleaned.txt"
 //  def openSource(fName:String) = {

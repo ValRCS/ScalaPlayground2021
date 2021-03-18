@@ -3,11 +3,26 @@ import scala.io.Source
 object Utilities {
   //not going to run it as such just use it for storing Utility functions/methods used in other objects / classes
   //I am using Object to store these because I do not need multiple copies
-  def saveUrlToFile(url:String, folder:String = "./src/resources/"):Unit = {
+  def getFilePathFromUrl(url:String, folder:String = "./src/resources/"):String = {
+    val fName = url.split("/").last.split('.') //if 25880.txt is assumed, final split and next line not needed
+    val fileName = fName(0) + "." + fName(1) //.org/ebooks/25880.txt.utf-8 third one is encoding
+    //only challenge is to extract last part from the url and add it to folder
+    val relative_save_path = folder + fileName
+    relative_save_path
+  }
+
+  //so we only do one thing save the url contents
+  def saveUrlToFile(url:String, filePath:String, encoding:String="utf-8"):Unit = {
     //TODO make a function which loads resource from url and
     // gets the last part of url and uses that to save into folder
     //you can use example from DownloadFiles
-    //only challenge is to exract last part from the url and add it to folder
+    //only challenge is to extract last part from the url and add it to folder
+    println(s"Will open $url")
+    //FIXME change iso to encoding
+    val txtBuffer = Source.fromURL(url, encoding)
+    val lines = txtBuffer.getLines.toArray //so we will exhaust our buffer here
+//    println(s"Dry run for lines: ${lines.length}") //notice this was 0 after we called getLines
+    Utilities.saveLines(lines,filePath)
   }
 
   def getLinesFromFile(srcPath: String): Array[String] = {
