@@ -66,4 +66,11 @@ object DBTest extends App {
 
   //the connection will be closed here after our app finishes running
   //sometimes you might want to close our connection earlier
+
+  //TODO create Artists Case Class
+  //TODO read data from database into a Sequence of Artists
+  //create new sql query etc
+
+  //Bonus find Artists starting with letter "A"
+  // you can do it two ways you could also use SQL here which is fine
 }
