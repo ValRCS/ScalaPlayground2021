@@ -1,3 +1,5 @@
+import java.sql.Connection
+
 import scala.collection.mutable.ListBuffer
 
 object DBTest extends App {
@@ -12,6 +14,7 @@ object DBTest extends App {
   import java.sql.DriverManager
 
   val conn = DriverManager.getConnection(url)
+  println(conn.getClientInfo()) //not too useful on SQLite but useful for something like SQL Server
   //for SQL dbs with users and permission and ports and external servers you will also need to add some extra parameters
   val statement = conn.createStatement() //Creates a Statement object for sending SQL statements to the database. S
 
@@ -119,4 +122,47 @@ object DBTest extends App {
   println("*"*40)
   val artistSQLFilterResults = artistFilteredBuffer.toSeq
   artistSQLFilterResults.foreach(println)
+
+
+  def migrateTable(conn:Connection) = {
+    val statement = conn.createStatement() //Creates a Statement object for sending SQL statements to the database. S
+
+    val sql =
+      """
+        |DROP TABLE IF EXISTS results;
+        |CREATE TABLE IF NOT EXISTS results (
+        |	resultID INTEGER PRIMARY KEY,
+        |   	artist TEXT NOT NULL,
+        |	hits INTEGER DEFAULT 0
+        |);
+        |""".stripMargin
+
+    statement.executeUpdate(sql)
+  }
+
+  def insertArtists(conn:Connection, artists: Seq[Artists]) = {
+    val statement = conn.createStatement()
+    val sql =
+      """
+        |INSERT INTO results (artist)
+        |VALUES
+        |( "ABBA"),
+        |("A-HA"),
+        |("AC/DC")
+        |;
+        |""".stripMargin
+    //TODO add actual artists from artists
+    statement.executeUpdate(sql)
+  }
+
+
+  val statementResult = migrateTable(conn)
+  println(s"SQL executeUpdate result is $statementResult")
+  val insertResult = insertArtists(conn, filteredArtists)
+  //it is a good idea to close the database connection as soon as possible,
+  // especially for DB such as SQLite which only supports one write at a time
+  println(conn.getSchema()) //again not very  useful on SQLite
+  conn.close()
+  //no more querying from now on until new connection is made
+
 }
