@@ -162,7 +162,7 @@ object ParsingPersonCSV extends App {
     preparedStmt.setString (11, person.Email)
     preparedStmt.setString (12, person.Web)
     preparedStmt.execute
-
+    //FIXME better performance to batch insert
     preparedStmt.close()
   }
 
