@@ -6,3 +6,6 @@ case class Person(name: String, age: Int, height: Double, weight: Double, var ha
     weight / (heightMeters*heightMeters)
   }
 }
+
+case class USPerson(Name: String, LastName: String, Company: String, Address: String, City: String,
+                    Country: String, State: String, Zip: Int, Phone1: String, Phone2: String, Email: String, Web: String)
