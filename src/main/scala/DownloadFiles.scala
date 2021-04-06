@@ -1,4 +1,5 @@
 import ReadingFiles.and_text
+import com.github.valrcs.Utilities
 
 object DownloadFiles extends App {
   val url = "https://www.gutenberg.org/ebooks/25880.txt.utf-8"

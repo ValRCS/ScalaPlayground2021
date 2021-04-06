@@ -1,3 +1,5 @@
+import com.github.valrcs.Utilities
+
 object RandomTest extends App {
   //full testing has their own folder and helper library
   

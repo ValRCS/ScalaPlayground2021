@@ -1,3 +1,5 @@
+import com.github.valrcs.Utilities
+
 object LargestIncrease extends App {
   val dataPath = "./src/resources/myInts.txt"
   val lines = Utilities.getLinesFromFile(dataPath)

@@ -1,3 +1,5 @@
+import com.github.valrcs.Utilities
+
 object ParsingCSV extends App{
   val relativePath = "src/resources/fruitvegprices-8mar21.csv"
   val lines = Utilities.getLinesFromFile(relativePath)

@@ -1,5 +1,7 @@
 import java.io.FileWriter
 
+import com.github.valrcs.Utilities
+
 object ExtractWebAddresses extends App {
 
   val poetry_path = "src/resources/poetry_1922.txt"

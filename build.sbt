@@ -16,5 +16,9 @@ libraryDependencies += "com.lihaoyi" %% "upickle" % "1.3.0"
 // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
 libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.34.0"
 
+// https://mvnrepository.com/artifact/com.nrinaudo/kantan.csv
+libraryDependencies += "com.nrinaudo" %% "kantan.csv" % "0.6.1"
+
+
 
 

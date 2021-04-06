@@ -1,5 +1,8 @@
+package com.github.valrcs
+
 import scala.io.Source
 
+//so a singleton (single instance) object of all my Utilities functions
 object Utilities {
   //not going to run it as such just use it for storing Utility functions/methods used in other objects / classes
   //I am using Object to store these because I do not need multiple copies
@@ -78,5 +81,12 @@ object Utilities {
     val pw = new PrintWriter(new File(destPath ))
     pw.write(txt)
     pw.close()
+  }
+
+  //and clamp
+  def clamp(value: Int, min: Int, max: Int): Int = {
+    if (value < min) min
+    else if (value > max) max
+    else value
   }
 }

@@ -1,3 +1,5 @@
+import com.github.valrcs.Utilities
+
 import scala.io.Source
 import scala.io.Source.fromURL
 

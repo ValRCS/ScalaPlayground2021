@@ -1,5 +1,7 @@
 import java.io.FileWriter
 
+import com.github.valrcs.Utilities
+
 import scala.sys.process.BasicIO.close
 
 object CookBook extends App {

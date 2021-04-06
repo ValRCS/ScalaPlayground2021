@@ -1,5 +1,7 @@
 import java.sql.{Connection, PreparedStatement}
 
+import com.github.valrcs.Utilities
+
 object ParsingPersonCSV extends App {
   val relativePath = "src/resources/us-500.csv"
   val lines = Utilities.getLinesFromFile(relativePath)
