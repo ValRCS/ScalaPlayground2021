@@ -14,9 +14,20 @@ object Nim extends App {
   //this is bare minimum for our game
 
   //we need loop for this
-  val matchesTaken = readLine("How many matches do you want to take?").toInt //no error checking
-  matches -= matchesTaken
-  isPlayerATurn = !isPlayerATurn //old trick on toggling boolean value
+  while (matches > 0) {
+    println(s"We have $matches left, it is ${getPlayerTurn(isPlayerATurn)} turn")
+
+    val matchesTaken = readLine(s"How many matches do you want to take ${getPlayerTurn(isPlayerATurn)}?").toInt //no error checking
+    matches -= matchesTaken
+    isPlayerATurn = !isPlayerATurn //old trick on toggling boolean value
+    //showing Game State
+
+  }
+
+  println(s"Congratulations you won ${getPlayerTurn(isPlayerATurn)}")
+
+  def getPlayerTurn(isATurn: Boolean):String = if (isPlayerATurn) "Player A" else "Player B"
+
   //we also need a check if the game has ended, but we can do that in the loop, in Scala we try to avoid break(able)
 
 }
