@@ -12,12 +12,19 @@ object Nim extends App {
   var matches = 21 // our game state
   var isPlayerATurn = true //at the beginning of game Player A starts
   //this is bare minimum for our game
+  val minMatches = 1
+  val maxMatches = 3
 
   //we need loop for this
   while (matches > 0) {
     println(s"We have $matches left, it is ${getPlayerTurn(isPlayerATurn)} turn")
 
-    val matchesTaken = readLine(s"How many matches do you want to take ${getPlayerTurn(isPlayerATurn)}?").toInt //no error checking
+    var matchesTaken = 0
+    while (matchesTaken < minMatches || matchesTaken > maxMatches) {
+      println(s"Please choose between $minMatches and $maxMatches matches")
+      matchesTaken = readLine(s"How many matches do you want to take ${getPlayerTurn(isPlayerATurn)}?").toInt
+    }
+
     matches -= matchesTaken
     isPlayerATurn = !isPlayerATurn //old trick on toggling boolean value
     //showing Game State
