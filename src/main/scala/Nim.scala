@@ -27,8 +27,12 @@ object Nim extends App {
     computerLevel match {
       case 1 => 1
       case 2 => r.between(minMatches, maxMatches + 1) //between last number is exclusive
-      case 3 => 3 //FIXME create a smart computer with optimal strategy! could create a function for this
+      case 3 => smartComputer(matches)
     }
+  }
+
+  def smartComputer(matches:Int): Int = {
+    3 //FIXME make me smart!
   }
 
   //we need loop for this
