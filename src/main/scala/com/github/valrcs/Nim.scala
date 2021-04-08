@@ -6,13 +6,15 @@ import scala.io.StdIn.readLine
 
 //so everything related to game state lives in separate Object
 //template for our game truths
-class GameState(startingMatchCount: Int = 21, minMatches:Int = 1, maxMatches:Int = 3, startComputerLevel:Int = 0) {
-  var matches = startingMatchCount
-  val min = minMatches
-  val max = maxMatches
-  var isPlayerATurn = true //at the beginning of game Player A starts
-  var isPlayerBComputer = false
-  var computerLevel = startComputerLevel
+class GameState(var matches: Int = 21,
+                val min:Int = 1,
+                val max:Int = 3,
+                var computerLevel:Int = 0,
+                var isPlayerBComputer:Boolean = false,
+                var isPlayerATurn:Boolean = true) {
+  //our constructor starts here
+  println(s"Instantiated our GameState object with matches:$matches, computerLevel: $computerLevel")
+ //at the beginning of game Player A starts
   //this is bare minimum for our game
 //we could have save a variable and used computer level as a selector meaning computerLevel 0 would be human :)
 }
@@ -23,11 +25,16 @@ object Nim extends App {
   //https://en.wikipedia.org/wiki/Nim#The_21_game
   println("Let's play a game of Nim!")
   //TODO implement 2 player version with 21 matches and up to 3 matches taken in one turn
-  val state = new GameState() //creating a new game state object with default parameters
+
   //we will want to have some state for our game
   //in our case our game state will be simple just an integer holding count of our matches
 
   val r = new scala.util.Random
+
+  //TODO we want to ask user for whether to randomize starting matches
+  //FIXME remove magic numbers
+  val startingMatches = if (readLine("Do you want start with random number of matches? ").toUpperCase.startsWith("Y")) r.between(10,30) else 21
+  val state = new GameState(matches=startingMatches) //creating a new game state object with default parameters
 
 
   val isPlayerBComputer = readLine("Do you want to play against computer (Y/N)?").contains("Y") //we could have added a more complex if
@@ -39,12 +46,11 @@ object Nim extends App {
   //careful with wildcard imports you might sometimes get a collision
 
 
-  def computerMove(matches: Int, computerLevel: Int): Int = {
-    computerLevel match {
-      case 1 => 1
-      case 2 => r.between(state.min, state.max + 1) //between last number is exclusive
-      case 3 => smartComputer(matches)
-    }
+  def computerMove(matches: Int, computerLevel: Int): Int = computerLevel match {
+    case 1 => 1
+    case 2 => r.between(state.min, state.max + 1) //between last number is exclusive
+    case 3 => smartComputer(matches)
+    case _ => 1 //TODO add logging here, this should never happen
   }
 
   def smartComputer(matches: Int): Int = {
