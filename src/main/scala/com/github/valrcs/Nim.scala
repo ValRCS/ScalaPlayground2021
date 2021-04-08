@@ -1,14 +1,29 @@
 package com.github.valrcs
 
+import java.io.File
+
 import com.github.valrcs.Utilities.clamp
 
 import scala.io.StdIn.readLine
 
+object GameConstants {
+  import org.ini4j.Ini
+  import org.ini4j.IniPreferences
+
+  val relative_path = "settings.ini" //relative path starting in our home directory for our project
+  val ini = new Ini(new File(relative_path))
+  val prefs = new IniPreferences(ini)
+  val defaultMatches = prefs.node("Nim").get("defaultMatches", null).toInt
+  val minStartingMatches = prefs.node("Nim").get("minStartingMatches", null).toInt
+  val maxStartingMatches = prefs.node("Nim").get("maxStartingMatches", null).toInt
+  println(s"defaultMatches $defaultMatches, minStart: $minStartingMatches, maxStart: $maxStartingMatches")
+}
+
 //so everything related to game state lives in separate Object
 //template for our game truths
-class GameState(var matches: Int = 21,
-                val min:Int = 1,
-                val max:Int = 3,
+class GameState(var matches: Int = GameConstants.defaultMatches,
+                val minMove:Int = 1,
+                val maxMove:Int = 3,
                 var computerLevel:Int = 0,
                 var isPlayerBComputer:Boolean = false,
                 var isPlayerATurn:Boolean = true) {
@@ -24,7 +39,6 @@ class GameState(var matches: Int = 21,
 object Nim extends App {
   //https://en.wikipedia.org/wiki/Nim#The_21_game
   println("Let's play a game of Nim!")
-  //TODO implement 2 player version with 21 matches and up to 3 matches taken in one turn
 
   //we will want to have some state for our game
   //in our case our game state will be simple just an integer holding count of our matches
@@ -32,14 +46,17 @@ object Nim extends App {
   val r = new scala.util.Random
 
   //TODO we want to ask user for whether to randomize starting matches
-  //FIXME remove magic numbers
-  val startingMatches = if (readLine("Do you want start with random number of matches? ").toUpperCase.startsWith("Y")) r.between(10,30) else 21
+  val startingMatches = if (readLine("Do you want start with random number of matches? ")
+    .toUpperCase
+    .startsWith("Y")) {
+    r.between(GameConstants.minStartingMatches, GameConstants.maxStartingMatches)
+  } else GameConstants.defaultMatches
   val state = new GameState(matches=startingMatches) //creating a new game state object with default parameters
 
 
-  val isPlayerBComputer = readLine("Do you want to play against computer (Y/N)?").contains("Y") //we could have added a more complex if
-  if (isPlayerBComputer) state.computerLevel = readLine("How strong a computer you want (1-3)? ").toInt //TODO Clamp function with (minMatches and maxMatches)
-  state.computerLevel = clamp(state.computerLevel, state.min, state.max)
+  val isPlayerBComputer = readLine("Do you want to play against computer (Y/N)?").toUpperCase.startsWith("Y") //we could have added a more complex if
+  if (isPlayerBComputer) state.computerLevel = readLine("How strong a computer you want (1-3)? ").toInt
+  state.computerLevel = clamp(state.computerLevel, state.minMove, state.maxMove)
   //for one off calls this would also work with fullname
   //  computerLevel =  com.github.valrcs.Utilities.clamp(computerLevel, minMatches, maxMatches)
   //  computerLevel =  Utilities.clamp(computerLevel, minMatches, maxMatches) //works because of wildcard import with _
@@ -48,7 +65,7 @@ object Nim extends App {
 
   def computerMove(matches: Int, computerLevel: Int): Int = computerLevel match {
     case 1 => 1
-    case 2 => r.between(state.min, state.max + 1) //between last number is exclusive
+    case 2 => r.between(state.minMove, state.maxMove + 1) //between last number is exclusive
     case 3 => smartComputer(matches)
     case _ => 1 //TODO add logging here, this should never happen
   }
@@ -60,19 +77,23 @@ object Nim extends App {
     //      case _ => 1
     //    }
     //more universal
+//    val take = matches match {
+//      case matches if matches % 4 == 0 => 3 //we are using case gourd
+//      case matches if matches % 4 == 3 => 2
+//      case matches if matches % 4 == 2 => 1
+//      //we always want a default case
+//      //here default is same as matches % 4 == 1
+//      //this is the case when computer is losing
+//      case _ => r.between(state.minMove, state.maxMove + 1) //idea being that if computer is in bad shape it should do random choice
+//    }
     val take = matches match {
-      case matches if matches % 4 == 0 => 3 //we are using case gourd
-      case matches if matches % 4 == 3 => 2
-      case matches if matches % 4 == 2 => 1
-      //we always want a default case
-      //here default is same as matches % 4 == 1
-      //this is the case when computer is losing
-      case _ => r.between(state.min, state.max + 1) //idea being that if computer is in bad shape it should do random choice
+      case matches if matches % 4 == 1 => r.between(state.minMove, state.maxMove + 1) //computer is going to lose so let it do something random
+      case _ => (matches-1) % 4 //matches + 3 or matches +7 would work just as well
     }
     take
   }
 
-  //we need loop for this
+  //main game loop
   while (state.matches > 0) {
     println(s"We have ${state.matches} left, it is ${getPlayerTurn(state.isPlayerATurn)} turn")
 
@@ -80,8 +101,8 @@ object Nim extends App {
     //computer check
     if (!state.isPlayerATurn && isPlayerBComputer) matchesTaken = computerMove(state.matches, state.computerLevel)
 
-    while (matchesTaken < state.min || matchesTaken > state.max) {
-      println(s"Please choose between ${state.min} and ${state.max} matches")
+    while (matchesTaken < state.minMove || matchesTaken > state.maxMove) {
+      println(s"Please choose between ${state.minMove} and ${state.maxMove} matches")
       matchesTaken = readLine(s"How many matches do you want to take ${getPlayerTurn(state.isPlayerATurn)}?").toInt
     }
 
