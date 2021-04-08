@@ -40,6 +40,7 @@ object Nim extends App {
   //https://en.wikipedia.org/wiki/Nim#The_21_game
   println("Let's play a game of Nim!")
 
+  //TODO ask for Player A name here optionally load defaault from ini
   //we will want to have some state for our game
   //in our case our game state will be simple just an integer holding count of our matches
 
@@ -56,6 +57,7 @@ object Nim extends App {
 
   val isPlayerBComputer = readLine("Do you want to play against computer (Y/N)?").toUpperCase.startsWith("Y") //we could have added a more complex if
   if (isPlayerBComputer) state.computerLevel = readLine("How strong a computer you want (1-3)? ").toInt
+  //TODO ask for Player B name when it is not computer :)
   state.computerLevel = clamp(state.computerLevel, state.minMove, state.maxMove)
   //for one off calls this would also work with fullname
   //  computerLevel =  com.github.valrcs.Utilities.clamp(computerLevel, minMatches, maxMatches)
@@ -114,6 +116,7 @@ object Nim extends App {
 
   println(s"Congratulations you won ${getPlayerTurn(state.isPlayerATurn)}!")
 
+  //TODO use Player Names from our GameState here
   def getPlayerTurn(isPlayerATurn: Boolean): String = if (isPlayerATurn) "Player A" else if (isPlayerBComputer) "Computer" else "Player B"
 
   //we also need a check if the game has ended, but we can do that in the loop, in Scala we try to avoid break(able)
