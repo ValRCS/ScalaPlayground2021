@@ -16,18 +16,22 @@ object GameConstants {
   val defaultMatches = prefs.node("Nim").get("defaultMatches", null).toInt
   val minStartingMatches = prefs.node("Nim").get("minStartingMatches", null).toInt
   val maxStartingMatches = prefs.node("Nim").get("maxStartingMatches", null).toInt
+  val playerA = prefs.node("Nim").get("playerA", null)
+  val playerB = prefs.node("Nim").get("playerB", null)
   println(s"defaultMatches $defaultMatches, minStart: $minStartingMatches, maxStart: $maxStartingMatches")
 }
 
 //so everything related to game state lives in separate Object
 //template for our game truths
-//TODO add PlayerA and PlayerB names
 class GameState(var matches: Int = GameConstants.defaultMatches,
                 val minMove:Int = 1,
                 val maxMove:Int = 3,
                 var computerLevel:Int = 0,
                 var isPlayerBComputer:Boolean = false,
-                var isPlayerATurn:Boolean = true) {
+                var isPlayerATurn:Boolean = true,
+                var playerA:String = GameConstants.playerA,
+                var playerB:String = GameConstants.playerB //of course for more than say 3 players you'd want them stored in a Map or Sequence
+               ) {
   //our constructor starts here
   println(s"Instantiated our GameState object with matches:$matches, computerLevel: $computerLevel")
  //at the beginning of game Player A starts
@@ -41,25 +45,32 @@ object Nim extends App {
   //https://en.wikipedia.org/wiki/Nim#The_21_game
   println("Let's play a game of Nim!")
 
-  //TODO ask for Player A name here optionally load defaault from ini
+  //TODO ask for Player A name here optionally load default from ini
   //we will want to have some state for our game
   //in our case our game state will be simple just an integer holding count of our matches
+  val playerA = readLine(s"What is your name Player A? (Press Enter to use default ${GameConstants.playerA})")
+
+  //idea being that we pass the playerA to our object constructor
+  val state = if (playerA.length == 0) new GameState() else new GameState(playerA = playerA)
+  //the above logic could have lived in the GameState class
 
   val r = new scala.util.Random
 
   //TODO we want to ask user for whether to randomize starting matches
-  val startingMatches = if (readLine("Do you want start with random number of matches? ")
+  state.matches = if (readLine("Do you want start with random number of matches? ")
     .toUpperCase
     .startsWith("Y")) {
     r.between(GameConstants.minStartingMatches, GameConstants.maxStartingMatches)
   } else GameConstants.defaultMatches
-  val state = new GameState(matches=startingMatches) //creating a new game state object with default parameters
 
 
-  val isPlayerBComputer = readLine("Do you want to play against computer (Y/N)?").toUpperCase.startsWith("Y") //we could have added a more complex if
-  if (isPlayerBComputer) state.computerLevel = readLine("How strong a computer you want (1-3)? ").toInt
-  //TODO ask for Player B name when it is not computer :)
-  state.computerLevel = clamp(state.computerLevel, state.minMove, state.maxMove)
+
+  state.isPlayerBComputer = readLine("Do you want to play against computer (Y/N)?").toUpperCase.startsWith("Y") //we could have added a more complex if
+  if (state.isPlayerBComputer) {
+    state.computerLevel = readLine("How strong a computer you want (1-3)? ").toInt
+    state.computerLevel = clamp(state.computerLevel, state.minMove, state.maxMove)
+  } else state.playerB = readLine("What is your name Player B?")
+
   //for one off calls this would also work with fullname
   //  computerLevel =  com.github.valrcs.Utilities.clamp(computerLevel, minMatches, maxMatches)
   //  computerLevel =  Utilities.clamp(computerLevel, minMatches, maxMatches) //works because of wildcard import with _
@@ -98,15 +109,15 @@ object Nim extends App {
 
   //main game loop
   while (state.matches > 0) {
-    println(s"We have ${state.matches} left, it is ${getPlayerTurn(state.isPlayerATurn)} turn")
+    println(s"We have ${state.matches} left, it is ${getPlayerTurn(state)} turn")
 
     var matchesTaken = 0
     //computer check
-    if (!state.isPlayerATurn && isPlayerBComputer) matchesTaken = computerMove(state.matches, state.computerLevel)
+    if (!state.isPlayerATurn && state.isPlayerBComputer) matchesTaken = computerMove(state.matches, state.computerLevel)
 
     while (matchesTaken < state.minMove || matchesTaken > state.maxMove) {
       println(s"Please choose between ${state.minMove} and ${state.maxMove} matches")
-      matchesTaken = readLine(s"How many matches do you want to take ${getPlayerTurn(state.isPlayerATurn)}?").toInt
+      matchesTaken = readLine(s"How many matches do you want to take ${getPlayerTurn(state)}?").toInt
     }
 
     state.matches -= matchesTaken
@@ -115,10 +126,14 @@ object Nim extends App {
 
   }
 
-  println(s"Congratulations you won ${getPlayerTurn(state.isPlayerATurn)}!")
+  println(s"Congratulations you won ${getPlayerTurn(state)}!")
 
   //TODO use Player Names from our GameState here
-  def getPlayerTurn(isPlayerATurn: Boolean): String = if (isPlayerATurn) "Player A" else if (isPlayerBComputer) "Computer" else "Player B"
+  def getPlayerTurn(state:GameState): String = {
+    if (state.isPlayerATurn) state.playerA
+    else if (state.isPlayerBComputer) "Computer"
+    else state.playerB
+  }
 
   //we also need a check if the game has ended, but we can do that in the loop, in Scala we try to avoid break(able)
 

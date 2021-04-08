@@ -22,6 +22,10 @@ libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.34.0"
 // https://mvnrepository.com/artifact/org.ini4j/ini4j
 libraryDependencies += "org.ini4j" % "ini4j" % "0.5.4"
 
+// https://mvnrepository.com/artifact/org.yaml/snakeyaml
+libraryDependencies += "org.yaml" % "snakeyaml" % "1.28"
+
+
 
 
 
