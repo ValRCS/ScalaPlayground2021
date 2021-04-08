@@ -5,21 +5,57 @@ import java.io.File
 import com.github.valrcs.Utilities.clamp
 
 import scala.io.StdIn.readLine
+import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.constructor.Constructor
+import scala.collection.mutable.ListBuffer
+import scala.beans.BeanProperty
+import java.io.{File, FileInputStream}
 
-object GameConstants {
-  import org.ini4j.Ini
-  import org.ini4j.IniPreferences
-
-  val relative_path = "settings.ini" //relative path starting in our home directory for our project
-  val ini = new Ini(new File(relative_path))
-  val prefs = new IniPreferences(ini)
-  val defaultMatches = prefs.node("Nim").get("defaultMatches", null).toInt
-  val minStartingMatches = prefs.node("Nim").get("minStartingMatches", null).toInt
-  val maxStartingMatches = prefs.node("Nim").get("maxStartingMatches", null).toInt
-  val playerA = prefs.node("Nim").get("playerA", null)
-  val playerB = prefs.node("Nim").get("playerB", null)
-  println(s"defaultMatches $defaultMatches, minStart: $minStartingMatches, maxStart: $maxStartingMatches")
+//example on how to read .ini files
+//object GameConstants {
+//  import org.ini4j.Ini
+//  import org.ini4j.IniPreferences
+//
+//  val relative_path = "settings.ini" //relative path starting in our home directory for our project
+//  val ini = new Ini(new File(relative_path))
+//  val prefs = new IniPreferences(ini)
+//  val defaultMatches = prefs.node("Nim").get("defaultMatches", null).toInt
+//  val minStartingMatches = prefs.node("Nim").get("minStartingMatches", null).toInt
+//  val maxStartingMatches = prefs.node("Nim").get("maxStartingMatches", null).toInt
+//  val playerA = prefs.node("Nim").get("playerA", null)
+//  val playerB = prefs.node("Nim").get("playerB", null)
+//  println(s"defaultMatches $defaultMatches, minStart: $minStartingMatches, maxStart: $maxStartingMatches")
+//}
+/**
+ * With the Snakeyaml Constructor approach shown in the main method,
+ * this class must have a no-args constructor.
+ */
+class GameSettings {
+  @BeanProperty var defaultMatches = 21
+  @BeanProperty var minStartingMatches = 5
+  @BeanProperty var maxStartingMatches = 15
+  @BeanProperty var playerA = "ValdisDefault"
+  @BeanProperty var playerB = "Liga"
+  //  @BeanProperty var usersOfInterest = new java.util.ArrayList[String]()
+  override def toString: String = s"A: $playerA, userB: $playerB defaultMatches: $defaultMatches"
 }
+object GameConstants {
+  println("Reading YAML")
+  val relativePath = "config.yaml" //again in our home directory //possible better place would be special config folder
+  val input = new FileInputStream(new File(relativePath))
+  val yaml = new Yaml(new Constructor(classOf[GameSettings]))
+  //here YAML constructor will use our GameSettings class to automagically retrieve right structure
+  val settings = yaml.load(input).asInstanceOf[GameSettings]  //so parsing happens here
+  println(settings)
+  val defaultMatches = settings.defaultMatches
+  val playerA = settings.playerA
+  val playerB = settings.playerB
+  val minStartingMatches = settings.minStartingMatches
+  val maxStartingMatches = settings.maxStartingMatches
+
+}
+
+
 
 //so everything related to game state lives in separate Object
 //template for our game truths
