@@ -21,6 +21,7 @@ object GameConstants {
 
 //so everything related to game state lives in separate Object
 //template for our game truths
+//TODO add PlayerA and PlayerB names
 class GameState(var matches: Int = GameConstants.defaultMatches,
                 val minMove:Int = 1,
                 val maxMove:Int = 3,
