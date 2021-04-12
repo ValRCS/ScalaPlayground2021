@@ -7,9 +7,11 @@ import com.github.valrcs.Utilities.clamp
 import scala.io.StdIn.readLine
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
+
 import scala.collection.mutable.ListBuffer
 import scala.beans.BeanProperty
 import java.io.{File, FileInputStream}
+import java.sql.{Connection, DriverManager, PreparedStatement}
 
 //example on how to read .ini files
 //object GameConstants {
@@ -80,7 +82,7 @@ class GameState(var matches: Int = GameConstants.defaultMatches,
   def showTopPlayers():Unit = {
     println("TOP players so far are")
     println("*"*40)
-    topPlayers.foreach(println)
+    topPlayers.foreach(println) //TODO create a print that prints playe name then WINS:1414 versus LOSSES:4342 for example
     println("*"*40)
   }
 }
@@ -121,10 +123,73 @@ object Nim extends App {
     state
   }
 
+  def migrateTable(conn:Connection) = {
+    val statement = conn.createStatement() //Creates a Statement object for sending SQL statements to the database. S
+
+    val sql =
+      """
+        |CREATE TABLE IF NOT EXISTS players (
+        |	playerID INTEGER PRIMARY KEY,
+        |   	name TEXT NOT NULL,
+        |	wins INTEGER DEFAULT 0,
+        | losses INTEGER DEFAULT 0
+        |);
+        |""".stripMargin
+
+    statement.executeUpdate(sql)
+  }
+  def savePlayers(db: String, players: Seq[Player]):Unit = {
+    val conn = DriverManager.getConnection(db)
+    savePlayer(conn, Player("Valdis", 5, 10)) //FIXME with real player stats
+  }
+
+  def savePlayer(connection: Connection, player: Player):Unit = {
+    println(s"Inserting Person $player")
+    val insertSql =
+      """
+        |INSERT INTO players(
+        |    name,
+        |    wins,
+        |    losses)
+        |    VALUES(?,?,?)
+      """.stripMargin
+    val preparedStmt: PreparedStatement = connection.prepareStatement(insertSql)
+    //sql 1 indexed here
+    preparedStmt.setString (1, player.name)
+    preparedStmt.setInt (2, player.win)
+    preparedStmt.setInt (3, player.lose)
+    preparedStmt.execute
+    preparedStmt.close()
+  }
+
+
   def getTopPlayers(db: String): Seq[Player] = {
     println(s"Getting my top players from database at $db")
-    //FIXME
-    Seq.empty[Player]
+    import java.sql.DriverManager
+
+    val conn = DriverManager.getConnection(db)
+    migrateTable(conn) //creating table if it does not exist //TODO move it out of getTopPlayers
+    val statement = conn.createStatement()
+    val sql =
+      """
+        |SELECT * from players
+        |ORDER BY wins DESC
+        |LIMIT 10
+        |""".stripMargin
+
+
+    val resultSet = statement.executeQuery(sql)
+    val playerList = scala.collection.mutable.ListBuffer.empty[Player]
+
+    while ( resultSet.next() ) {
+      val player = Player(resultSet.getString("Name"),
+        resultSet.getString("wins").toInt,
+        resultSet.getString("losses").toInt)
+      playerList.append(player)
+      //    println(row.size)
+    }
+    conn.close()
+    playerList.toSeq
   }
   //for one off calls this would also work with fullname
   //  computerLevel =  com.github.valrcs.Utilities.clamp(computerLevel, minMatches, maxMatches)
@@ -185,8 +250,9 @@ object Nim extends App {
   }
 
   println(s"Congratulations you won ${getPlayerTurn(state)}!")
+  //TODO save player information here
+  savePlayers(GameConstants.dbUrl, state.topPlayers) //FIXME with real players
 
-  //TODO use Player Names from our GameState here
   def getPlayerTurn(state:GameState): String = {
     if (state.isPlayerATurn) state.playerA
     else if (state.isPlayerBComputer) "Computer"
