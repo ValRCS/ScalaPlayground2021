@@ -211,9 +211,11 @@ object Nim extends App {
     val sql =
       """
         |SELECT * from players
-        |ORDER BY wins DESC
+        |ORDER BY wins DESC,
+        |losses ASC
         |""".stripMargin
 //so I took off LIMIT 10 since I can easily hold all players in memory
+    //so losses are tiebreak in case of equal wins
 
     val resultSet = statement.executeQuery(sql)
     val playerList = scala.collection.mutable.ListBuffer.empty[Player]
