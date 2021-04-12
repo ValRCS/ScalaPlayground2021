@@ -71,7 +71,9 @@ class GameState(var matches: Int = GameConstants.defaultMatches,
                 var isPlayerATurn:Boolean = true,
                 var playerA:String = GameConstants.playerA,
                 var playerB:String = GameConstants.playerB, //of course for more than say 3 players you'd want them stored in a Map or Sequence
-                var topPlayers:Seq[Player] = Seq.empty[Player]
+                var topPlayers:Seq[Player] = Seq.empty[Player],
+                var winner:String = "",
+                var loser:String = ""
                ) {
   //our constructor starts here
   println(s"Instantiated our GameState object with matches:$matches, computerLevel: $computerLevel")
@@ -79,10 +81,11 @@ class GameState(var matches: Int = GameConstants.defaultMatches,
   //this is bare minimum for our game
 //we could have save a variable and used computer level as a selector meaning computerLevel 0 would be human :)
   //we creating a helper method inside our gamestate
-  def showTopPlayers():Unit = {
+  def showTopPlayers(limit:Int = 10):Unit = {
     println("TOP players so far are")
     println("*"*40)
-    topPlayers.foreach(println) //TODO create a print that prints playe name then WINS:1414 versus LOSSES:4342 for example
+//    topPlayers.foreach(println) //TODO create a print that prints player name then WINS:1414 versus LOSSES:4342 for example
+    topPlayers.slice(0,limit).foreach(player => println(s"${player.name}: ${player.win} wins, ${player.lose} loses"))
     println("*"*40)
   }
 }
@@ -140,10 +143,45 @@ object Nim extends App {
   }
   def savePlayers(db: String, players: Seq[Player]):Unit = {
     val conn = DriverManager.getConnection(db)
-    savePlayer(conn, Player("Valdis", 5, 10)) //FIXME with real player stats
+    //get current players and insert into databese if the do not exist otherwise update
+//    insertPlayer(conn, Player("Valdis", 5, 10)) //FIXME with real player stats
+    if (state.topPlayers.exists(p => p.name == state.winner)) {
+      val winner:Player = state.topPlayers.find(p => p.name == state.winner).getOrElse(Player("nil", 0,0)) //could improve on this
+      updatePlayer(conn, Player(state.winner, winner.win+1, winner.lose))
+    } else insertPlayer(conn, Player(state.winner, 1, 0))
+
+
+    if (state.topPlayers.exists(p => p.name == state.loser)) {
+      val loser:Player = state.topPlayers.find(p => p.name == state.loser).getOrElse(Player("nil", 0,0))
+      updatePlayer(conn, Player(state.loser, loser.win, loser.lose+1))
+    } else insertPlayer(conn, Player(state.loser, 0, 1))
+
   }
 
-  def savePlayer(connection: Connection, player: Player):Unit = {
+  def updatePlayer(connection: Connection, player: Player):Unit = {
+    println(s"Updating Player $player")
+    val updateSql = {
+      """
+        |UPDATE players
+        | SET wins = ?,
+        |     losses = ?
+        |   WHERE
+        |   name = ?
+      """.stripMargin
+      //we are only going to update those rows with matching player name, in this case it will be only one row
+    }
+    val preparedStmt: PreparedStatement = connection.prepareStatement(updateSql)
+    //sql 1 indexed here
+
+    preparedStmt.setInt (1, player.win)
+    preparedStmt.setInt (2, player.lose)
+    preparedStmt.setString (3, player.name)
+    preparedStmt.execute
+    preparedStmt.close()
+  }
+
+
+  def insertPlayer(connection: Connection, player: Player):Unit = {
     println(s"Inserting Person $player")
     val insertSql =
       """
@@ -174,9 +212,8 @@ object Nim extends App {
       """
         |SELECT * from players
         |ORDER BY wins DESC
-        |LIMIT 10
         |""".stripMargin
-
+//so I took off LIMIT 10 since I can easily hold all players in memory
 
     val resultSet = statement.executeQuery(sql)
     val playerList = scala.collection.mutable.ListBuffer.empty[Player]
@@ -250,6 +287,10 @@ object Nim extends App {
   }
 
   println(s"Congratulations you won ${getPlayerTurn(state)}!")
+  state.winner = getPlayerTurn(state)
+  //we will do an empty turn to get loser's name
+  state.isPlayerATurn = !state.isPlayerATurn //old trick on toggling boolean value
+  state.loser = getPlayerTurn(state)
   //TODO save player information here
   savePlayers(GameConstants.dbUrl, state.topPlayers) //FIXME with real players
 
