@@ -45,13 +45,13 @@ object GameConstants {
   val input = new FileInputStream(new File(relativePath))
   val yaml = new Yaml(new Constructor(classOf[GameSettings]))
   //here YAML constructor will use our GameSettings class to automagically retrieve right structure
-  val settings = yaml.load(input).asInstanceOf[GameSettings]  //so parsing happens here
+  val settings: GameSettings = yaml.load(input).asInstanceOf[GameSettings]  //so parsing happens here
   println(settings)
-  val defaultMatches = settings.defaultMatches
-  val playerA = settings.playerA
-  val playerB = settings.playerB
-  val minStartingMatches = settings.minStartingMatches
-  val maxStartingMatches = settings.maxStartingMatches
+  val defaultMatches: Int = settings.defaultMatches
+  val playerA: String = settings.playerA
+  val playerB: String = settings.playerB
+  val minStartingMatches: Int = settings.minStartingMatches
+  val maxStartingMatches: Int = settings.maxStartingMatches
 
 }
 
@@ -79,33 +79,34 @@ class GameState(var matches: Int = GameConstants.defaultMatches,
 
 object Nim extends App {
   //https://en.wikipedia.org/wiki/Nim#The_21_game
-  println("Let's play a game of Nim!")
-
-  //TODO ask for Player A name here optionally load default from ini
-  //we will want to have some state for our game
-  //in our case our game state will be simple just an integer holding count of our matches
-  val playerA = readLine(s"What is your name Player A? (Press Enter to use default ${GameConstants.playerA})")
-
-  //idea being that we pass the playerA to our object constructor
-  val state = if (playerA.length == 0) new GameState() else new GameState(playerA = playerA)
-  //the above logic could have lived in the GameState class
-
   val r = new scala.util.Random
+  val state = init()
 
-  //TODO we want to ask user for whether to randomize starting matches
-  state.matches = if (readLine("Do you want start with random number of matches? ")
-    .toUpperCase
-    .startsWith("Y")) {
-    r.between(GameConstants.minStartingMatches, GameConstants.maxStartingMatches)
-  } else GameConstants.defaultMatches
+  def init():GameState = {
+    println("Let's play a game of Nim!")
 
+    //we will want to have some state for our game
+    //in our case our game state will be simple just an integer holding count of our matches
+    val playerA = readLine(s"What is your name Player A? (Press Enter to use default ${GameConstants.playerA})")
 
+    //idea being that we pass the playerA to our object constructor
+    val state = if (playerA.length == 0) new GameState() else new GameState(playerA = playerA)
+    //the above logic could have lived in the GameState class
 
-  state.isPlayerBComputer = readLine("Do you want to play against computer (Y/N)?").toUpperCase.startsWith("Y") //we could have added a more complex if
-  if (state.isPlayerBComputer) {
-    state.computerLevel = readLine("How strong a computer you want (1-3)? ").toInt
-    state.computerLevel = clamp(state.computerLevel, state.minMove, state.maxMove)
-  } else state.playerB = readLine("What is your name Player B?")
+    state.matches = if (readLine("Do you want start with random number of matches? ")
+      .toUpperCase
+      .startsWith("Y")) {
+      r.between(GameConstants.minStartingMatches, GameConstants.maxStartingMatches)
+    } else GameConstants.defaultMatches
+
+    state.isPlayerBComputer = readLine("Do you want to play against computer (Y/N)?").toUpperCase.startsWith("Y") //we could have added a more complex if
+    if (state.isPlayerBComputer) {
+      state.computerLevel = readLine("How strong a computer you want (1-3)? ").toInt
+      state.computerLevel = clamp(state.computerLevel, state.minMove, state.maxMove)
+    } else state.playerB = readLine("What is your name Player B?")
+
+    state
+  }
 
   //for one off calls this would also work with fullname
   //  computerLevel =  com.github.valrcs.Utilities.clamp(computerLevel, minMatches, maxMatches)
