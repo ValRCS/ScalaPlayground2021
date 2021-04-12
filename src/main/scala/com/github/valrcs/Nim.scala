@@ -36,6 +36,7 @@ class GameSettings {
   @BeanProperty var maxStartingMatches = 15
   @BeanProperty var playerA = "ValdisDefault"
   @BeanProperty var playerB = "Liga"
+  @BeanProperty var databaseLocation = "./src/resources/db/nim.db" //we could leave it empty
   //  @BeanProperty var usersOfInterest = new java.util.ArrayList[String]()
   override def toString: String = s"A: $playerA, userB: $playerB defaultMatches: $defaultMatches"
 }
@@ -44,7 +45,8 @@ object GameConstants {
   val relativePath = "config.yaml" //again in our home directory //possible better place would be special config folder
   val input = new FileInputStream(new File(relativePath))
   val yaml = new Yaml(new Constructor(classOf[GameSettings]))
-  //here YAML constructor will use our GameSettings class to automagically retrieve right structure
+  //here YAML constructor will use our GameSettings class to automagically retrieve
+  // right structure
   val settings: GameSettings = yaml.load(input).asInstanceOf[GameSettings]  //so parsing happens here
   println(settings)
   val defaultMatches: Int = settings.defaultMatches
@@ -52,10 +54,10 @@ object GameConstants {
   val playerB: String = settings.playerB
   val minStartingMatches: Int = settings.minStartingMatches
   val maxStartingMatches: Int = settings.maxStartingMatches
-
+  val dbUrl: String = s"jdbc:sqlite:${settings.databaseLocation}" //for now we only support sqlite
 }
 
-
+case class Player(name: String, win: Int, lose: Int)
 
 //so everything related to game state lives in separate Object
 //template for our game truths
@@ -66,13 +68,21 @@ class GameState(var matches: Int = GameConstants.defaultMatches,
                 var isPlayerBComputer:Boolean = false,
                 var isPlayerATurn:Boolean = true,
                 var playerA:String = GameConstants.playerA,
-                var playerB:String = GameConstants.playerB //of course for more than say 3 players you'd want them stored in a Map or Sequence
+                var playerB:String = GameConstants.playerB, //of course for more than say 3 players you'd want them stored in a Map or Sequence
+                var topPlayers:Seq[Player] = Seq.empty[Player]
                ) {
   //our constructor starts here
   println(s"Instantiated our GameState object with matches:$matches, computerLevel: $computerLevel")
  //at the beginning of game Player A starts
   //this is bare minimum for our game
 //we could have save a variable and used computer level as a selector meaning computerLevel 0 would be human :)
+  //we creating a helper method inside our gamestate
+  def showTopPlayers():Unit = {
+    println("TOP players so far are")
+    println("*"*40)
+    topPlayers.foreach(println)
+    println("*"*40)
+  }
 }
 
 
@@ -105,9 +115,17 @@ object Nim extends App {
       state.computerLevel = clamp(state.computerLevel, state.minMove, state.maxMove)
     } else state.playerB = readLine("What is your name Player B?")
 
+    //TODO get topPlayers from DataBase
+    state.topPlayers = getTopPlayers(GameConstants.dbUrl)
+    state.showTopPlayers()
     state
   }
 
+  def getTopPlayers(db: String): Seq[Player] = {
+    println(s"Getting my top players from database at $db")
+    //FIXME
+    Seq.empty[Player]
+  }
   //for one off calls this would also work with fullname
   //  computerLevel =  com.github.valrcs.Utilities.clamp(computerLevel, minMatches, maxMatches)
   //  computerLevel =  Utilities.clamp(computerLevel, minMatches, maxMatches) //works because of wildcard import with _
@@ -115,11 +133,14 @@ object Nim extends App {
 
 
   def computerMove(matches: Int, computerLevel: Int): Int = computerLevel match {
-    case 1 => 1
-    case 2 => r.between(state.minMove, state.maxMove + 1) //between last number is exclusive
+    case 1 => stupidComputer()
+    case 2 => randomComputer() //between last number is exclusive
     case 3 => smartComputer(matches)
     case _ => 1 //TODO add logging here, this should never happen
   }
+
+  def stupidComputer(): Int = 1
+  def randomComputer(): Int = r.between(state.minMove, state.maxMove + 1)
 
   def smartComputer(matches: Int): Int = {
     //    val take = matches match {
