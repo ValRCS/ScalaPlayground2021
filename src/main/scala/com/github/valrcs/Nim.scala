@@ -1,101 +1,19 @@
 package com.github.valrcs
 
-import java.io.File
-
 import com.github.valrcs.Utilities.clamp
 
 import scala.io.StdIn.readLine
-import org.yaml.snakeyaml.Yaml
-import org.yaml.snakeyaml.constructor.Constructor
-
-import scala.collection.mutable.ListBuffer
-import scala.beans.BeanProperty
-import java.io.{File, FileInputStream}
 import java.sql.{Connection, DriverManager, PreparedStatement}
 
-//example on how to read .ini files
-//object GameConstants {
-//  import org.ini4j.Ini
-//  import org.ini4j.IniPreferences
-//
-//  val relative_path = "settings.ini" //relative path starting in our home directory for our project
-//  val ini = new Ini(new File(relative_path))
-//  val prefs = new IniPreferences(ini)
-//  val defaultMatches = prefs.node("Nim").get("defaultMatches", null).toInt
-//  val minStartingMatches = prefs.node("Nim").get("minStartingMatches", null).toInt
-//  val maxStartingMatches = prefs.node("Nim").get("maxStartingMatches", null).toInt
-//  val playerA = prefs.node("Nim").get("playerA", null)
-//  val playerB = prefs.node("Nim").get("playerB", null)
-//  println(s"defaultMatches $defaultMatches, minStart: $minStartingMatches, maxStart: $maxStartingMatches")
-//}
-/**
- * With the Snakeyaml Constructor approach shown in the main method,
- * this class must have a no-args constructor.
- */
-class GameSettings {
-  @BeanProperty var defaultMatches = 21
-  @BeanProperty var minStartingMatches = 5
-  @BeanProperty var maxStartingMatches = 15
-  @BeanProperty var playerA = "ValdisDefault"
-  @BeanProperty var playerB = "Liga"
-  @BeanProperty var databaseLocation = "./src/resources/db/nim.db" //we could leave it empty
-  //  @BeanProperty var usersOfInterest = new java.util.ArrayList[String]()
-  override def toString: String = s"A: $playerA, userB: $playerB defaultMatches: $defaultMatches"
-}
-object GameConstants {
-  println("Reading YAML")
-  val relativePath = "config.yaml" //again in our home directory //possible better place would be special config folder
-  val input = new FileInputStream(new File(relativePath))
-  val yaml = new Yaml(new Constructor(classOf[GameSettings]))
-  //here YAML constructor will use our GameSettings class to automagically retrieve
-  // right structure
-  val settings: GameSettings = yaml.load(input).asInstanceOf[GameSettings]  //so parsing happens here
-  println(settings)
-  val defaultMatches: Int = settings.defaultMatches
-  val playerA: String = settings.playerA
-  val playerB: String = settings.playerB
-  val minStartingMatches: Int = settings.minStartingMatches
-  val maxStartingMatches: Int = settings.maxStartingMatches
-  val dbUrl: String = s"jdbc:sqlite:${settings.databaseLocation}" //for now we only support sqlite
-}
-
-case class Player(name: String, win: Int, lose: Int)
-
-//so everything related to game state lives in separate Object
-//template for our game truths
-class GameState(var matches: Int = GameConstants.defaultMatches,
-                val minMove:Int = 1,
-                val maxMove:Int = 3,
-                var computerLevel:Int = 0,
-                var isPlayerBComputer:Boolean = false,
-                var isPlayerATurn:Boolean = true,
-                var playerA:String = GameConstants.playerA,
-                var playerB:String = GameConstants.playerB, //of course for more than say 3 players you'd want them stored in a Map or Sequence
-                var topPlayers:Seq[Player] = Seq.empty[Player],
-                var winner:String = "",
-                var loser:String = ""
-               ) {
-  //our constructor starts here
-  println(s"Instantiated our GameState object with matches:$matches, computerLevel: $computerLevel")
- //at the beginning of game Player A starts
-  //this is bare minimum for our game
-//we could have save a variable and used computer level as a selector meaning computerLevel 0 would be human :)
-  //we creating a helper method inside our gamestate
-  def showTopPlayers(limit:Int = 10):Unit = {
-    println("TOP players so far are")
-    println("*"*40)
-//    topPlayers.foreach(println) //TODO create a print that prints player name then WINS:1414 versus LOSSES:4342 for example
-    topPlayers.slice(0,limit).foreach(player => println(s"${player.name}: ${player.win} wins, ${player.lose} loses"))
-    println("*"*40)
-  }
-}
-
-
+import org.slf4j.LoggerFactory
+import com.typesafe.scalalogging.Logger
 
 object Nim extends App {
   //https://en.wikipedia.org/wiki/Nim#The_21_game
   val r = new scala.util.Random
   val state = init()
+  val myLogger = LoggerFactory.getLogger("com.github.valrcs")
+  myLogger.info("Testing my logger")
 
   def init():GameState = {
     println("Let's play a game of Nim!")
@@ -120,13 +38,16 @@ object Nim extends App {
       state.computerLevel = clamp(state.computerLevel, state.minMove, state.maxMove)
     } else state.playerB = readLine("What is your name Player B?")
 
-    //TODO get topPlayers from DataBase
+//    log.debug("Getting Top players")
     state.topPlayers = getTopPlayers(GameConstants.dbUrl)
     state.showTopPlayers()
     state
   }
 
+  //TODO move Database operations into a separate object
   def migrateTable(conn:Connection) = {
+    val logger = Logger("db")
+    logger.debug("Creating table if it does not exists in db")
     val statement = conn.createStatement() //Creates a Statement object for sending SQL statements to the database. S
 
     val sql =
@@ -141,6 +62,7 @@ object Nim extends App {
 
     statement.executeUpdate(sql)
   }
+
   def savePlayers(db: String, players: Seq[Player]):Unit = {
     val conn = DriverManager.getConnection(db)
     //get current players and insert into databese if the do not exist otherwise update
@@ -160,6 +82,7 @@ object Nim extends App {
 
   def updatePlayer(connection: Connection, player: Player):Unit = {
     println(s"Updating Player $player")
+    myLogger.debug(s"Updating Player $player")
     val updateSql = {
       """
         |UPDATE players
@@ -182,7 +105,7 @@ object Nim extends App {
 
 
   def insertPlayer(connection: Connection, player: Player):Unit = {
-    println(s"Inserting Person $player")
+    myLogger.debug(s"Inserting Person $player")
     val insertSql =
       """
         |INSERT INTO players(
@@ -202,8 +125,9 @@ object Nim extends App {
 
 
   def getTopPlayers(db: String): Seq[Player] = {
-    println(s"Getting my top players from database at $db")
-    import java.sql.DriverManager
+//    log.debug(s"Getting my top players from database at $db")
+//    log.debug(s"Getting my top players from database") //TODO why log here is not possible
+
 
     val conn = DriverManager.getConnection(db)
     migrateTable(conn) //creating table if it does not exist //TODO move it out of getTopPlayers
@@ -228,6 +152,7 @@ object Nim extends App {
       //    println(row.size)
     }
     conn.close()
+    Logger("TOP PLAYERS").debug("DB connection closed") //FIXME why global logger throws NPE?
     playerList.toSeq
   }
   //for one off calls this would also work with fullname
@@ -293,8 +218,8 @@ object Nim extends App {
   //we will do an empty turn to get loser's name
   state.isPlayerATurn = !state.isPlayerATurn //old trick on toggling boolean value
   state.loser = getPlayerTurn(state)
-  //TODO save player information here
-  savePlayers(GameConstants.dbUrl, state.topPlayers) //FIXME with real players
+
+  savePlayers(GameConstants.dbUrl, state.topPlayers)
 
   def getPlayerTurn(state:GameState): String = {
     if (state.isPlayerATurn) state.playerA
