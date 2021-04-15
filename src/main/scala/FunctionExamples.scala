@@ -44,6 +44,8 @@ object FunctionExamples extends App {
     a + b //in Scala last line in function is returned automatically
   }
 
+  def div(a:Double, b:Double): Double = a / b
+
   //now with return value our function results can be saved!
   val addResult = add(3, 6)
   println(addResult)

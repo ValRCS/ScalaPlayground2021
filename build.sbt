@@ -32,6 +32,8 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 // https://mvnrepository.com/artifact/com.typesafe.scala-logging/scala-logging
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.3"
 
+// https://mvnrepository.com/artifact/org.scalatest/scalatest
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.7" % Test
 
 
 
