@@ -89,4 +89,6 @@ object Utilities {
     else if (value > max) max
     else value
   }
+
+  def myMax(values: Seq[Int]):Int = values.max
 }
