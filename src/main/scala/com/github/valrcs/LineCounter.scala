@@ -1,10 +1,10 @@
 package com.github.valrcs
 
 object LineCounter extends App {
-  println("Getting some command line arguments")
-//  for (arg <- args) {
-//    println(s"Processing command line argument $arg")
-//  }
+  println("Getting some command line arguments first showing those args:")
+  for (arg <- args) {
+    println(s"Processing command line argument $arg")
+  }
   var lineCount: Int = 0
   if (args.length > 0) {
     val fileName = args(0)

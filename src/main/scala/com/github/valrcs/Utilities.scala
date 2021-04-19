@@ -1,6 +1,7 @@
 package com.github.valrcs
 
-import scala.io.Source
+import scala.io.{Codec, Source}
+
 
 //so a singleton (single instance) object of all my Utilities functions
 object Utilities {
@@ -28,8 +29,8 @@ object Utilities {
     Utilities.saveLines(lines, filePath)
   }
 
-  def getLinesFromFile(srcPath: String): Array[String] = {
-    val bufferedSource = Source.fromFile(srcPath)
+  def getLinesFromFile(srcPath: String, encoding:String="UTF8"): Array[String] = {
+    val bufferedSource = Source.fromFile(srcPath, enc=encoding)
     val lines = bufferedSource.getLines.toArray
     bufferedSource.close
     lines
