@@ -43,7 +43,7 @@ object LargestIncrease extends App {
 
   //TODO solve biggest increase in so called Linear time - meaning single loop
   def findBiggestIncreaseLin(ints: Seq[Int]):Int = {
-    var min = ints(0)
+    var min = ints.head //ints(0)
 //    var max = ints(0)
     var relativeWinner = 0
     var absoluteWinner = 0
@@ -61,17 +61,17 @@ object LargestIncrease extends App {
   }
   println("Testing Linear Algorithm")
   println(findBiggestIncreaseLin(testSeq))
-  println(findBiggestIncreaseLin((1 to 10)))
-  println(findBiggestIncreaseLin((10 to 1 by -1 )))
+  println(findBiggestIncreaseLin(1 to 10))
+  println(findBiggestIncreaseLin(10 to 1 by -1 ))
   println(findBiggestIncreaseLin(Seq(4,7,2,10,1,6,10,3,6)))
 
   var t0 = System.nanoTime()
-  val increase1 = findBiggestIncreaseLin(integers)
+  val increase1 = findBiggestIncreaseLin(integers.toSeq)
   var t1 = System.nanoTime()
   println("Elapsed time: " + (t1 - t0) + "ns")
 
   t0 = System.nanoTime()
-  val increase2 = findBiggestIncrease(integers)
+  val increase2 = findBiggestIncrease(integers.toSeq)
   t1 = System.nanoTime()
   println("Elapsed time: " + (t1 - t0) + "ns")
 
@@ -84,12 +84,12 @@ object LargestIncrease extends App {
 
   //this should take a while on 100k....
   t0 = System.nanoTime()
-  val increase4 = findBiggestIncrease(int100k)
+  val increase4 = findBiggestIncrease(int100k.toSeq)
   t1 = System.nanoTime()
   println("Elapsed time for brute force: " + (t1 - t0) + "ns")
 
   t0 = System.nanoTime()
-  val increase3 = findBiggestIncreaseLin(int100k)
+  val increase3 = findBiggestIncreaseLin(int100k.toSeq)
   t1 = System.nanoTime()
   println("Elapsed time for linear version: " + (t1 - t0) + "ns")
 
@@ -97,7 +97,7 @@ object LargestIncrease extends App {
 
 
   def findBiggestIncreaseLinImproved(ints: Seq[Int]):Int = {
-    var min = ints(0)
+    var min = ints.head // ints(0)
     var winner = 0
     for (n <- ints.tail) { //in some data structures tail operation could be slow
       val delta = n - min //this should work because ints indexing is one less than our values
@@ -108,7 +108,7 @@ object LargestIncrease extends App {
   }
 
   t0 = System.nanoTime()
-  val increase5 = findBiggestIncreaseLinImproved(int100k)
+  val increase5 = findBiggestIncreaseLinImproved(int100k.toSeq)
   t1 = System.nanoTime()
   println("Elapsed time for improved Linear version: " + (t1 - t0) + "ns")
 

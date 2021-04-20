@@ -7,7 +7,7 @@ object TheLottery extends App {
   var myText = Seq[String]()
   try {
     val filePointer = scala.io.Source.fromFile(fileName)
-    val myLines = filePointer.getLines
+    val myLines = filePointer.getLines()
     myText = myLines.toSeq
     filePointer.close()
   } catch {
@@ -21,7 +21,7 @@ object TheLottery extends App {
   val teams = shuffled zip shuffled.reverse
   teams.foreach(println)
 
-  def saveSeq(destName:String, mySeq:Seq[Any]) = {
+  def saveSeq(destName:String, mySeq:Seq[Any]): Unit= {
     println(s"Saving my Sequence to file $destName")
     mySeq.foreach(println) //we are good up to here
     val fw = new FileWriter(destName)

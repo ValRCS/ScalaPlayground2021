@@ -1,12 +1,28 @@
 package com.github.valrcs
 
+
+
 import scala.io.{Codec, Source}
 
 
-//so a singleton (single instance) object of all my Utilities functions
+
+/** Utilities object holding methods for [[com.github.valrcs]]
+ *
+ * so a singleton (single instance) object of all my Utilities functions
+ * @author Valdis Saulespurens
+ *         author is Valdis Saulespurens
+ * @version 0.93
+ */
 object Utilities {
   //not going to run it as such just use it for storing Utility functions/methods used in other objects / classes
   //I am using Object to store these because I do not need multiple copies
+
+  /** Builds a file path from a url and folder
+   *
+   * @param url will extract end of url (from example.com/foo/test.txt -> test.txt will be extracted
+   * @param folder folder
+   * @return Relative save path
+   */
   def getFilePathFromUrl(url: String, folder: String = "./src/resources/"): String = {
     val fName = url.split("/").last.split('.') //if 25880.txt is assumed, final split and next line not needed
     val fileName = fName(0) + "." + fName(1) //.org/ebooks/25880.txt.utf-8 third one is encoding
@@ -15,7 +31,13 @@ object Utilities {
     relative_save_path
   }
 
-  //so we only do one thing save the url contents
+
+  /** //so we only do one thing save the url contents
+   *
+   * @param url url
+   * @param filePath filePath
+   * @param encoding encoding defualt UTF8
+   */
   def saveUrlToFile(url: String, filePath: String, encoding: String = "utf-8"): Unit = {
     //TODO make a function which loads resource from url and
     // gets the last part of url and uses that to save into folder
@@ -24,14 +46,20 @@ object Utilities {
     println(s"Will open $url")
     //FIXME change iso to encoding
     val txtBuffer = Source.fromURL(url, encoding)
-    val lines = txtBuffer.getLines.toArray //so we will exhaust our buffer here
+    val lines = txtBuffer.getLines().toArray //so we will exhaust our buffer here
     //    println(s"Dry run for lines: ${lines.length}") //notice this was 0 after we called getLines
     Utilities.saveLines(lines, filePath)
   }
 
+  /**
+   *
+   * @param srcPath source Path
+   * @param encoding default UTF8
+   * @return Array of String Lines
+   */
   def getLinesFromFile(srcPath: String, encoding:String="UTF8"): Array[String] = {
     val bufferedSource = Source.fromFile(srcPath, enc=encoding)
-    val lines = bufferedSource.getLines.toArray
+    val lines = bufferedSource.getLines().toArray
     bufferedSource.close
     lines
   }

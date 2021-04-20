@@ -1,5 +1,12 @@
 package com.github.valrcs
 
+/**
+ * LineCounter Application for [[com.github.valrcs]]
+ * counts lines given a filepath as an argument
+ * @author Valdis Saulespurens
+ * @version 0.93
+ * @todo getLineCount(fname) method
+ */
 object LineCounter extends App {
   println("Getting some command line arguments first showing those args:")
   for (arg <- args) {

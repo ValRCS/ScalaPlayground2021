@@ -10,7 +10,7 @@ object ReadingFiles extends App {
 //  lines.foreach(println)
   //better get a reference to our file buffer(stream) and then close it properly when done
   val bufferedSource = Source.fromFile(absolute_path)
-  val lines = bufferedSource.getLines.toArray
+  val lines = bufferedSource.getLines().toArray
   bufferedSource.close //now file is properly closed (assuming no exceptions)
 
   //now we can work with file contents
@@ -29,7 +29,7 @@ object ReadingFiles extends App {
 
   def getLinesFromFile(srcPath: String) = {
     val bufferedSource = Source.fromFile(srcPath)
-    val lines = bufferedSource.getLines.toArray
+    val lines = bufferedSource.getLines().toArray
     bufferedSource.close
     lines
   }

@@ -65,7 +65,7 @@ object ParsingPersonCSV extends App {
 
   def convertToUsPerson(tokens: Seq[String]):USPerson = {
     USPerson(
-      tokens(0),
+      tokens.head, //tokens(0)
       tokens(1),
       tokens(2),
       tokens(3),
@@ -82,7 +82,7 @@ object ParsingPersonCSV extends App {
   }
 
   //we do not need header since we already coded it
-  val usPersons = cleanCols.tail.map(convertToUsPerson(_))
+  val usPersons = cleanCols.tail.map(arr => convertToUsPerson(arr.toSeq)).toSeq
 
   usPersons.slice(0,5).foreach(println)
 

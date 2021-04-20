@@ -22,7 +22,7 @@ object FindingPrimes extends App {
       for (n <- divisors) { //we know the number divides by itself and also by 1
         if (curNumber % n == 0) {
           println(s"curNumber $curNumber divides evenly with $n that's not a prime")
-          break
+          break()
         }//so if the current candidate divides evenly by any number under itself (not counting 1) it is not a prime
       }
       println(s"$curNumber is a prime!")

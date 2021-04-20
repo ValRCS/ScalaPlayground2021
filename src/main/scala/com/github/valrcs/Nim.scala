@@ -8,6 +8,13 @@ import java.sql.{Connection, DriverManager, PreparedStatement}
 import org.slf4j.LoggerFactory
 import com.typesafe.scalalogging.Logger
 
+/**
+ * Nim game
+ * https://en.wikipedia.org/wiki/Nim#The_21_game
+ * @version 0.93.1
+ *          @author Valdis Saulespurens
+ *
+ */
 object Nim extends App {
   //https://en.wikipedia.org/wiki/Nim#The_21_game
   val r = new scala.util.Random
@@ -15,6 +22,10 @@ object Nim extends App {
   val myLogger = LoggerFactory.getLogger("com.github.valrcs")
   myLogger.info("Testing my logger")
 
+  /** Initialize our GameState
+   * Reads user input and does some validation
+   * @return GameState
+   */
   def init():GameState = {
     println("Let's play a game of Nim!")
 

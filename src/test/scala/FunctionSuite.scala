@@ -30,7 +30,7 @@ class FunctionSuite extends AnyFunSuite {
   test("testing for Arithmetic exception") {
     assertThrows[ArithmeticException] {
       //code which could throw this exception goes here
-      5/2 //this will not throw it so the Test WILL FAIL without next line!
+      //this will not throw it so the Test WILL FAIL without next line!
       5/0 //this will throw it so test should pass here
     }
   }

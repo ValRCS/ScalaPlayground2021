@@ -10,7 +10,7 @@ object DownloadFiles extends App {
   //we could have goten just a string without splitting lines by
   //val s = txtBuffer.mkString
 
-  val lines = txtBuffer.getLines.toArray //so we will exhaust our buffer here
+  val lines = txtBuffer.getLines().toArray //so we will exhaust our buffer here
   println(txtBuffer.size) //notice this was 0 after we called getLines
 
 
